@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-nevermanual",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "n8n nodes for the Never Manual API: run Studio workflows, add files to Media, post to social accounts with Slate, and start workflows when runs and posts end.",
 	"license": "MIT",
 	"homepage": "https://api.nevermanual.cloud/docs",
