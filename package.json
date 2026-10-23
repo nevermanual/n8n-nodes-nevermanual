@@ -1,0 +1,61 @@
+{
+	"name": "n8n-nodes-nevermanual",
+	"version": "0.1.0",
+	"description": "n8n nodes for the Never Manual API: run Studio workflows, add files to Media, post to social accounts with Slate, and start workflows when runs and posts end.",
+	"license": "MIT",
+	"homepage": "https://api.nevermanual.cloud/docs",
+	"keywords": [
+		"n8n-community-node-package",
+		"n8n",
+		"nevermanual",
+		"never-manual",
+		"comfyui",
+		"social-media"
+	],
+	"author": {
+		"name": "Never Manual",
+		"email": "support@nevermanual.cloud"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/nevermanual/n8n-nodes-nevermanual.git"
+	},
+	"bugs": {
+		"url": "https://github.com/nevermanual/n8n-nodes-nevermanual/issues"
+	},
+	"scripts": {
+		"build": "n8n-node build",
+		"build:watch": "tsc --watch",
+		"dev": "n8n-node dev",
+		"lint": "n8n-node lint",
+		"lint:fix": "n8n-node lint --fix",
+		"release": "n8n-node release",
+		"prepublishOnly": "n8n-node prerelease"
+	},
+	"files": [
+		"dist",
+		"!dist/tsconfig.tsbuildinfo",
+		"CHANGELOG.md"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"strict": true,
+		"credentials": [
+			"dist/credentials/NeverManualApi.credentials.js"
+		],
+		"nodes": [
+			"dist/nodes/NeverManual/NeverManual.node.js",
+			"dist/nodes/NeverManualTrigger/NeverManualTrigger.node.js"
+		]
+	},
+	"devDependencies": {
+		"@n8n/node-cli": "^0.53.4",
+		"eslint": "9.32.0",
+		"prettier": "3.6.2",
+		"release-it": "^21.1.0",
+		"typescript": "5.9.2"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	}
+}
