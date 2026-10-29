@@ -38,12 +38,15 @@ for details.
 
 ### n8n Cloud
 
-The package is being submitted for n8n's verification; once verified it appears in the nodes panel of n8n Cloud.
+The node is verified by n8n (rolling out to n8n Cloud in November 2026). An instance owner or admin searches for
+**Never Manual** in the nodes panel, finds it under *More from the community*, and installs it from there.
 
 ## Credentials
 
-1. Sign in to Never Manual and open **Accounts → API keys** (you need to be a workspace admin).
-2. Click **New key**, name it after what will use it (for example `n8n`), and choose:
+1. [Create a Never Manual account](https://accounts.nevermanual.cloud/register?from=n8n&redirect_url=%2Fsettings%3Ftab%3DapiKeys)
+   and name your workspace. A new workspace starts with $2 on its balance to try Studio runs. Already have an
+   account? [Open API keys](https://accounts.nevermanual.cloud/settings?tab=apiKeys&from=n8n).
+2. In **Settings → API keys** (workspace admins only), click **New key**, name it after what will use it (for example `n8n`), and choose:
    - **Full access** to start runs, add files, post and use the trigger (it subscribes webhooks);
    - **Read only** to list and read only.
 3. Copy the key (`nmk_…`). It is shown once.
