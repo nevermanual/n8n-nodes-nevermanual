@@ -44,8 +44,8 @@ The node is verified by n8n (rolling out to n8n Cloud in November 2026). An inst
 ## Credentials
 
 1. [Create a Never Manual account](https://accounts.nevermanual.cloud/register?from=n8n&redirect_url=%2Fsettings%3Ftab%3DapiKeys)
-   and name your workspace. To try Studio runs before you top up, message us on Telegram at
-   [@nevermanual_bot](https://t.me/nevermanual_bot) and we'll add credit to your workspace. Already have an
+   and name your workspace. Studio runs are paid from the workspace balance (**Settings → Billing**). Questions?
+   Message us on Telegram at [@nevermanual_bot](https://t.me/nevermanual_bot). Already have an
    account? [Open API keys](https://accounts.nevermanual.cloud/settings?tab=apiKeys&from=n8n).
 2. In **Settings → API keys** (workspace admins only), click **New key**, name it after what will use it (for example `n8n`), and choose:
    - **Full access** to start runs, add files, post and use the trigger (it subscribes webhooks);
