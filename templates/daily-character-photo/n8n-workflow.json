@@ -1,0 +1,636 @@
+{
+  "name": "Post a daily AI character photo from Google Sheets to Instagram, X and Bluesky with your own ComfyUI workflow",
+  "nodes": [
+    {
+      "id": "a1f0c9d2-0b6e-4c11-9a51-3f7e2d1c0a01",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -540,
+        -300
+      ],
+      "parameters": {
+        "color": 1,
+        "width": 460,
+        "height": 1160,
+        "content": "## Daily AI character photo: your ComfyUI workflow → Instagram, X and Bluesky\n\n@[youtube](uWoa948iCwE)\n\nOne new photo a day from your own ComfyUI workflow, posted to three networks with captions in your character's voice, through Never Manual's Studio and Slate.\n\n### How it works\n1. Every morning: the next scene marked `new` in your Google Sheet.\n2. **Prompt and LoRAs** builds the prompt and sets LoRA strengths.\n3. **Studio** runs your ComfyUI workflow (here Krea 2 + character and realism LoRAs) on a GPU.\n4. **Slate** queues it for Instagram and X by API, and for Bluesky in the real app on a cloud phone, physical or virtual. Each account captions it in its own voice. Posts go out at once or at the account's posting times; *Hold for Review* lets you approve first.\n5. The row is marked `posted` with the Media ID, post IDs and cost.\n\nNo `new` row: nothing runs. A failed node leaves the row `new` for the next run. A post that fails later shows in Slate, not here.\n\n### Setup\n1. Install the verified community node `n8n-nodes-nevermanual` (tested 0.1.1, n8n 2.47).\n2. Sign up at nevermanual.cloud; add an API key as the Never Manual credential.\n3. In Studio, import the [ComfyUI workflow file](https://github.com/nevermanual/n8n-nodes-nevermanual/blob/main/templates/daily-character-photo/Krea%202%20Kiki%20%2B%20realism.json); its models load by themselves.\n4. In Slate, connect Instagram and X. For Bluesky (its rules allow automation), add a cloud phone with the app and a photo-post preset. Give each account an Autofill voice.\n5. [Copy the scenes sheet](https://docs.google.com/spreadsheets/d/1F0Hlt7Qnklh0ceR3JaP79trpDQemQc7Rdoh841gIGdo/copy), connect Google Sheets and pick it in both Sheets nodes.\n6. Pick your Studio workflow and an account in each Post node.\n\n### Customization\nPick any ComfyUI workflow of yours in the Studio node and edit **Prompt and LoRAs**. Drop a network you don't need, or swap the Sheets nodes for n8n Data tables."
+      }
+    },
+    {
+      "id": "a1f0c9d2-0b6e-4c11-9a51-3f7e2d1c0a02",
+      "name": "Section: pick a scene",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -300
+      ],
+      "parameters": {
+        "color": 7,
+        "width": 820,
+        "height": 1010,
+        "content": "## Pick today's scene\nThe next row with status `new`."
+      }
+    },
+    {
+      "id": "a1f0c9d2-0b6e-4c11-9a51-3f7e2d1c0a03",
+      "name": "Section: make the photo",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        840,
+        -300
+      ],
+      "parameters": {
+        "color": 7,
+        "width": 440,
+        "height": 1010,
+        "content": "## Make the photo in Studio\nThe prompt and LoRA strengths live in **Prompt and LoRAs**."
+      }
+    },
+    {
+      "id": "a1f0c9d2-0b6e-4c11-9a51-3f7e2d1c0a04",
+      "name": "Section: post by API",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        -300
+      ],
+      "parameters": {
+        "color": 7,
+        "width": 290,
+        "height": 520,
+        "content": "## Post by API\nInstagram and X through their official APIs. Captions: each account's Autofill."
+      }
+    },
+    {
+      "id": "a1f0c9d2-0b6e-4c11-9a51-3f7e2d1c0a06",
+      "name": "Section: Bluesky on a cloud phone",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        240
+      ],
+      "parameters": {
+        "color": 7,
+        "width": 290,
+        "height": 470,
+        "content": "## Bluesky: the real app on a cloud phone\nNo API: an AI agent posts in the Bluesky app on a Never Manual cloud phone, physical or virtual, by the account's **preset**.\nWrite presets for any app and action, or show the steps once on the phone."
+      }
+    },
+    {
+      "id": "a1f0c9d2-0b6e-4c11-9a51-3f7e2d1c0a05",
+      "name": "Section: log",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1760,
+        -300
+      ],
+      "parameters": {
+        "color": 7,
+        "width": 660,
+        "height": 1010,
+        "content": "## Log in the sheet\nAfter all three posts are queued."
+      }
+    },
+    {
+      "id": "b2e1d0c3-1c7f-4d22-8b62-4a8f3e2d1b01",
+      "name": "Every morning",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 10
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "b2e1d0c3-1c7f-4d22-8b62-4a8f3e2d1b02",
+      "name": "Read the scenes",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "b2e1d0c3-1c7f-4d22-8b62-4a8f3e2d1b03",
+      "name": "Prompt and LoRAs",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        900,
+        0
+      ],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "p1",
+              "name": "prompt",
+              "type": "string",
+              "value": "=Kiki, an adult woman in her late twenties. A highly realistic vertical smartphone photo: {{ $json.scene }} Preserve the ordinary imperfections of a real photograph: fine skin texture, subtle phone sharpening, slight softness in the darker areas, a few stray hairs. One adult woman, approximately 28 years old."
+            },
+            {
+              "id": "p2",
+              "name": "character_strength",
+              "type": "number",
+              "value": 0.92
+            },
+            {
+              "id": "p3",
+              "name": "realism_strength",
+              "type": "number",
+              "value": 1
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "b2e1d0c3-1c7f-4d22-8b62-4a8f3e2d1b04",
+      "name": "Run the ComfyUI workflow in Studio",
+      "type": "n8n-nodes-nevermanual.neverManual",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        0
+      ],
+      "parameters": {
+        "resource": "studioRun",
+        "operation": "start",
+        "workflowId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "inputSource": "json",
+        "inputsJson": "={{ { \"Prompt\": $json.prompt } }}",
+        "speed": "standard",
+        "waitForCompletion": true,
+        "timeoutMinutes": 15,
+        "pollSeconds": 5,
+        "options": {
+          "advanced": "={{ { \"n11.strength_model\": $json.character_strength, \"n12.strength_model\": $json.realism_strength } }}"
+        }
+      }
+    },
+    {
+      "id": "b2e1d0c3-1c7f-4d22-8b62-4a8f3e2d1b05",
+      "name": "Post to Instagram",
+      "type": "n8n-nodes-nevermanual.neverManual",
+      "typeVersion": 1,
+      "position": [
+        1480,
+        -110
+      ],
+      "parameters": {
+        "resource": "slatePost",
+        "operation": "create",
+        "accounts": [],
+        "media": "={{ $json.outputs[0].media_id }}",
+        "text": "",
+        "when": "queue",
+        "kind": "feed",
+        "hold": false
+      }
+    },
+    {
+      "id": "b2e1d0c3-1c7f-4d22-8b62-4a8f3e2d1b07",
+      "name": "Post to X",
+      "type": "n8n-nodes-nevermanual.neverManual",
+      "typeVersion": 1,
+      "position": [
+        1480,
+        60
+      ],
+      "parameters": {
+        "resource": "slatePost",
+        "operation": "create",
+        "accounts": [],
+        "media": "={{ $json.outputs[0].media_id }}",
+        "text": "",
+        "when": "queue",
+        "kind": "feed",
+        "hold": false
+      }
+    },
+    {
+      "id": "b2e1d0c3-1c7f-4d22-8b62-4a8f3e2d1b09",
+      "name": "Post to Bluesky (cloud phone)",
+      "type": "n8n-nodes-nevermanual.neverManual",
+      "typeVersion": 1,
+      "position": [
+        1480,
+        540
+      ],
+      "parameters": {
+        "resource": "slatePost",
+        "operation": "create",
+        "accounts": [],
+        "media": "={{ $json.outputs[0].media_id }}",
+        "text": "",
+        "when": "queue",
+        "kind": "feed",
+        "hold": false
+      }
+    },
+    {
+      "id": "b2e1d0c3-1c7f-4d22-8b62-4a8f3e2d1b08",
+      "name": "All posts queued",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        1820,
+        0
+      ],
+      "parameters": {
+        "mode": "chooseBranch",
+        "numberInputs": 3
+      }
+    },
+    {
+      "id": "b2e1d0c3-1c7f-4d22-8b62-4a8f3e2d1b06",
+      "name": "Mark the row posted",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2260,
+        0
+      ],
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "scene",
+              "displayName": "scene",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "media_id",
+              "displayName": "media_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "instagram_post",
+              "displayName": "instagram_post",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "x_post",
+              "displayName": "x_post",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "bluesky_post",
+              "displayName": "bluesky_post",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "cost",
+              "displayName": "cost",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "c3f2e1d0-2d8a-4e33-9c73-5b9f4e3d2c01",
+      "name": "Only new scenes",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f1",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "new",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "c3f2e1d0-2d8a-4e33-9c73-5b9f4e3d2c02",
+      "name": "Take the next scene",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        660,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "c3f2e1d0-2d8a-4e33-9c73-5b9f4e3d2c03",
+      "name": "What goes in the sheet",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2040,
+        0
+      ],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "l1",
+              "name": "row_number",
+              "type": "number",
+              "value": "={{ $('Take the next scene').first().json.row_number }}"
+            },
+            {
+              "id": "l2",
+              "name": "status",
+              "type": "string",
+              "value": "posted"
+            },
+            {
+              "id": "l3",
+              "name": "media_id",
+              "type": "number",
+              "value": "={{ $('Run the ComfyUI workflow in Studio').first().json.outputs[0].media_id }}"
+            },
+            {
+              "id": "l4",
+              "name": "instagram_post",
+              "type": "string",
+              "value": "={{ String($('Post to Instagram').first().json.id) }}"
+            },
+            {
+              "id": "l5",
+              "name": "x_post",
+              "type": "string",
+              "value": "={{ String($('Post to X').first().json.id) }}"
+            },
+            {
+              "id": "l6",
+              "name": "bluesky_post",
+              "type": "string",
+              "value": "={{ String($('Post to Bluesky (cloud phone)').first().json.id) }}"
+            },
+            {
+              "id": "l7",
+              "name": "cost",
+              "type": "number",
+              "value": "={{ $('Run the ComfyUI workflow in Studio').first().json.price_usd }}"
+            }
+          ]
+        },
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Every morning": {
+      "main": [
+        [
+          {
+            "node": "Read the scenes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Take the next scene": {
+      "main": [
+        [
+          {
+            "node": "Prompt and LoRAs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prompt and LoRAs": {
+      "main": [
+        [
+          {
+            "node": "Run the ComfyUI workflow in Studio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run the ComfyUI workflow in Studio": {
+      "main": [
+        [
+          {
+            "node": "Post to Instagram",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Post to X",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Post to Bluesky (cloud phone)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post to Instagram": {
+      "main": [
+        [
+          {
+            "node": "All posts queued",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post to X": {
+      "main": [
+        [
+          {
+            "node": "All posts queued",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Post to Bluesky (cloud phone)": {
+      "main": [
+        [
+          {
+            "node": "All posts queued",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "All posts queued": {
+      "main": [
+        [
+          {
+            "node": "What goes in the sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read the scenes": {
+      "main": [
+        [
+          {
+            "node": "Only new scenes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Only new scenes": {
+      "main": [
+        [
+          {
+            "node": "Take the next scene",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "What goes in the sheet": {
+      "main": [
+        [
+          {
+            "node": "Mark the row posted",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}
