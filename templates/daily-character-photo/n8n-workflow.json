@@ -1,5 +1,5 @@
 {
-  "name": "Post a daily AI character photo from Google Sheets to Instagram, X and Bluesky with your own ComfyUI workflow",
+  "name": "Post a daily ComfyUI photo from Google Sheets to Instagram and X by API and to Bluesky with an AI agent on a cloud phone",
   "nodes": [
     {
       "id": "a1f0c9d2-0b6e-4c11-9a51-3f7e2d1c0a01",
