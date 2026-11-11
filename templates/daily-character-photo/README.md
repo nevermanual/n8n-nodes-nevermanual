@@ -6,7 +6,7 @@ from the real app on a cloud phone. Each account writes its own caption in the c
 
 ![The workflow in n8n](workflow.png)
 
-Video walkthrough: https://youtu.be/uWoa948iCwE
+Video walkthrough: https://youtu.be/uWoa948iCwE · Written guide: https://nevermanual.cloud/blog/run-comfyui-workflow-from-n8n
 
 ## Files
 
