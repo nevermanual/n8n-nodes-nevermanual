@@ -1,0 +1,1754 @@
+{
+  "name": "Turn one Telegram idea into a photo, carousel, Reel and story for every network with Studio and Slate",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {
+          "chatIds": ""
+        }
+      },
+      "id": "6796a5a2-6a91-5d50-a46d-29ccf6538e64",
+      "name": "Idea from Telegram",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "2c147014-da37-580d-b171-2781032d60a0"
+    },
+    {
+      "parameters": {
+        "events": [
+          "post.published",
+          "post.failed"
+        ]
+      },
+      "id": "21213d9a-4210-5164-ac32-dfffffc1d361",
+      "name": "A post went out or failed",
+      "type": "n8n-nodes-nevermanual.neverManualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        700
+      ],
+      "webhookId": "9d6fe746-707e-587f-86b4-fdb31a93fb34"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "51ac8e95-7e53-53d1-880a-32172841282b",
+              "name": "telegram_chat_id",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "4fd6f4e0-e236-5b14-a277-e4369aa3b5a7",
+              "name": "photo_workflow",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "f8fb161f-8360-56d4-8e0f-80aba611415a",
+              "name": "photo_prompt_start",
+              "value": "Kiki, an adult woman in her late twenties. A highly realistic vertical smartphone photo:",
+              "type": "string"
+            },
+            {
+              "id": "4effbf3b-b729-57b9-9601-fbb3a477db13",
+              "name": "photo_prompt_end",
+              "value": "Preserve the ordinary imperfections of a real photograph: fine skin texture, subtle phone sharpening, slight softness in the darker areas, a few stray hairs. One adult woman, approximately 28 years old.",
+              "type": "string"
+            },
+            {
+              "id": "58fd3a60-0799-50db-884e-799f10b0a5da",
+              "name": "character",
+              "value": "Kiki, a friendly woman in her late twenties with shoulder-length light brown hair who loves cafés, markets and small trips",
+              "type": "string"
+            },
+            {
+              "id": "328e3325-713f-5224-a507-be16e3006b68",
+              "name": "instagram_account",
+              "value": 0,
+              "type": "number"
+            },
+            {
+              "id": "08f0002f-0a88-5530-8781-8580c85814c9",
+              "name": "tiktok_account",
+              "value": 0,
+              "type": "number"
+            },
+            {
+              "id": "ac8f2c84-9a4d-52b4-92e9-f46942175244",
+              "name": "x_account",
+              "value": 0,
+              "type": "number"
+            },
+            {
+              "id": "c8134be3-98aa-5bc9-b77c-28f5b6b49c78",
+              "name": "threads_account",
+              "value": 0,
+              "type": "number"
+            },
+            {
+              "id": "17a86107-1157-5411-8d2d-83da83f7f99d",
+              "name": "bluesky_account",
+              "value": 0,
+              "type": "number"
+            },
+            {
+              "id": "5af26acb-41d7-565f-a5fc-88af7142dce6",
+              "name": "video_seconds",
+              "value": 5,
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "fdb0e961-14e0-527f-8134-6c2384bd2b1a",
+      "name": "Settings",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        260,
+        340
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "2fa4b02e-bc27-52d1-9ac4-1b639a43291b",
+      "name": "Something failed",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        1100
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "97d15ae2-806e-5ed7-a077-271c105532a9",
+                    "leftValue": "={{ $json.message?.text }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    }
+                  },
+                  {
+                    "id": "fe8f4480-3b02-5f9b-b95c-fd8d479b4a43",
+                    "leftValue": "={{ $json.message?.text }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notStartsWith"
+                    },
+                    "rightValue": "/"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Idea"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "81b1575e-62d1-5591-b4e0-92351780c379",
+                    "leftValue": "={{ $json.type }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    },
+                    "rightValue": "post."
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Post"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "70ce0079-7304-5968-88c1-1cf0e3bb885d",
+                    "leftValue": "={{ $json.execution?.error?.message }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Failure"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8a6bc05d-b1a5-53d2-8dcb-22442eb4541a",
+      "name": "Idea or post?",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        480,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Settings').first().json.message.chat.id }}",
+        "text": "=On it: “{{ (t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))($json.message.text) }}”. The photo, a carousel, a story and a Reel are on the way — I'll send them here for a look in about 15 minutes.",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "42dac934-ebce-5e0f-8692-9e12c4c45b96",
+      "name": "Got it",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        720,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Today's idea: {{ $('Settings').first().json.message.text }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You plan one day of social media content for {{ $('Settings').first().json.character }} from one idea. Everything is shown from one main photo, so all parts must fit that single moment.\n\nReturn:\n- scene: 2–3 sentences for the main photo, in a phone-photo style: the shot and the place, what she wears, her expression and what she does, the light. Concrete and ordinary, no fantasy, no text in the picture.\n- carousel_edits: exactly 3 edit instructions for an image editor that changes the main photo into other moments of the same scene. Each one clear sentence starting with a verb, saying what stays, e.g. \"Change the camera to a close-up of her hands holding the cup; keep her clothes, the light and the place.\" Vary them: a close-up, another angle, another moment.\n- motion: 1–3 sentences for a 5-second video made from the main photo: what moves, how the camera goes, what is heard.\n- story_text: 3 to 6 words for an Instagram story over the photo, casual, no hashtags, no emoji.\n- summary: one short line naming the plan for the person who approves it.\nWrite in English."
+        }
+      },
+      "id": "f50d4c6b-0a66-5f3e-a9a7-10acaa7714c6",
+      "name": "Plan the content",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        940,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "options": {
+          "temperature": 0.8
+        }
+      },
+      "id": "2d90bafe-11c7-50c1-a551-558ae894cd4d",
+      "name": "Chat model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        880,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"scene\": {\n      \"type\": \"string\"\n    },\n    \"carousel_edits\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"minItems\": 3,\n      \"maxItems\": 3\n    },\n    \"motion\": {\n      \"type\": \"string\"\n    },\n    \"story_text\": {\n      \"type\": \"string\"\n    },\n    \"summary\": {\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\n    \"scene\",\n    \"carousel_edits\",\n    \"motion\",\n    \"story_text\",\n    \"summary\"\n  ]\n}"
+      },
+      "id": "0c608340-5501-5a92-bff2-b32dd5b03006",
+      "name": "Plan format",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1060,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "studioRun",
+        "operation": "start",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $('Settings').first().json.photo_workflow }}"
+        },
+        "inputSource": "json",
+        "inputsJson": "={{ JSON.stringify({ Prompt: [$('Settings').first().json.photo_prompt_start, $('Plan the content').first().json.output.scene, ($('Post it?').isExecuted ? ($('Post it?').last().json.data['What to change'] || '') : ''), $('Settings').first().json.photo_prompt_end].filter(Boolean).join(' ') }) }}",
+        "speed": "standard",
+        "waitForCompletion": true,
+        "timeoutMinutes": 20,
+        "pollSeconds": 10,
+        "options": {}
+      },
+      "id": "7d966721-066f-55c8-9577-5e12688a5c1e",
+      "name": "Main photo",
+      "type": "n8n-nodes-nevermanual.neverManual",
+      "typeVersion": 1,
+      "position": [
+        1260,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "609cd65e-7905-56d6-a7fa-f2cf758b996a",
+              "name": "main",
+              "value": "={{ $json.outputs.find((o => o.kind === 'image')).media_id }}",
+              "type": "number"
+            },
+            {
+              "id": "2d1473a6-d83a-57bb-be86-26351a077e2d",
+              "name": "edits",
+              "value": "={{ $('Plan the content').first().json.output.carousel_edits }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e3d8b555-868b-5c02-bbfa-d27e5094f72b",
+      "name": "Carousel edits",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "edits",
+        "include": "selectedOtherFields",
+        "fieldsToInclude": "main",
+        "options": {}
+      },
+      "id": "2cab1f5a-045a-5e62-87fd-2b67a7b90044",
+      "name": "One edit at a time",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1700,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "studioRun",
+        "operation": "start",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "native/kie.image"
+        },
+        "inputSource": "json",
+        "inputsJson": "={{ JSON.stringify({ Model: 'google/nano-banana-edit', Prompt: $json.edits, References: $json.main, Aspect: '3:4' }) }}",
+        "speed": "standard",
+        "waitForCompletion": true,
+        "timeoutMinutes": 20,
+        "pollSeconds": 10,
+        "options": {}
+      },
+      "id": "fb843495-1caf-5f39-8c7f-ca299c1db04e",
+      "name": "Edit the photo",
+      "type": "n8n-nodes-nevermanual.neverManual",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "edits",
+        "options": {}
+      },
+      "id": "f535fd71-3cb0-536e-975a-be1558d26049",
+      "name": "Carousel ready",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2140,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "studioRun",
+        "operation": "start",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "pipeline/nm-story-from-photo"
+        },
+        "inputSource": "json",
+        "inputsJson": "={{ JSON.stringify({ Photo: $('Main photo').last().json.outputs.find((o => o.kind === 'image')).media_id, 'Words on it': $('Plan the content').first().json.output.story_text }) }}",
+        "speed": "standard",
+        "waitForCompletion": true,
+        "timeoutMinutes": 10,
+        "pollSeconds": 10,
+        "options": {}
+      },
+      "id": "7cf264c7-48e9-5d2d-b7fe-4390a9c9687b",
+      "name": "Story",
+      "type": "n8n-nodes-nevermanual.neverManual",
+      "typeVersion": 1,
+      "position": [
+        2360,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "resource": "studioRun",
+        "operation": "start",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "pipeline/nm-reel-from-photo"
+        },
+        "inputSource": "json",
+        "inputsJson": "={{ JSON.stringify({ Photo: $('Main photo').last().json.outputs.find((o => o.kind === 'image')).media_id, 'What happens': [$('Plan the content').first().json.output.motion, ($('Post it?').isExecuted ? ($('Post it?').last().json.data['What to change'] || '') : '')].filter(Boolean).join(' ') }) }}",
+        "speed": "standard",
+        "waitForCompletion": false,
+        "options": {
+          "advanced": "={{ JSON.stringify({ 'video.n320.value_4': $('Settings').first().json.video_seconds }) }}",
+          "webhookUrl": "={{ $execution.resumeUrl }}"
+        }
+      },
+      "id": "65c5fd2c-7378-5ba8-b4bf-ced749b4fc10",
+      "name": "Reel",
+      "type": "n8n-nodes-nevermanual.neverManual",
+      "typeVersion": 1,
+      "position": [
+        2580,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "httpMethod": "POST",
+        "limitWaitTime": true,
+        "limitType": "afterTimeInterval",
+        "resumeAmount": 45,
+        "resumeUnit": "minutes",
+        "options": {}
+      },
+      "id": "d3179f3e-f7ff-52cd-a6a4-f2e640831f1c",
+      "name": "Wait for the Reel",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2800,
+        0
+      ],
+      "webhookId": "117b9603-a359-562c-9e15-c0f1fd52753b"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f99be600-2a9c-5f03-b01b-0d17b0b55e94",
+              "leftValue": "={{ $json.body?.type }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "rightValue": "run.completed"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "52bf1d0d-c671-5699-93eb-3a2a5b566b5d",
+      "name": "Reel made?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3020,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Settings').first().json.message.chat.id }}",
+        "text": "=The Reel did not come: {{ (t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))($json.body?.data?.error || 'Studio took longer than 45 minutes') }}. Send the idea again to try once more.",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "8977849a-d1bf-5c57-a840-9c38734fbb4a",
+      "name": "The Reel did not come",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3240,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Settings').first().json.telegram_chat_id }}",
+        "text": "=Something failed at “{{ (t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))($json.execution.lastNodeExecuted) }}”: {{ (t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))($json.execution.error.message) }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "786d06d4-d999-54be-aa07-8d6ebe68ce68",
+      "name": "Say what failed",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        720,
+        1100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "sendMediaGroup",
+        "chatId": "={{ $('Settings').first().json.message.chat.id }}",
+        "media": {
+          "media": [
+            {
+              "type": "photo",
+              "media": "={{ (o => o && o.media && o.media.urls ? o.media.urls.download : '')($('Main photo').last().json.outputs.find((o => o.kind === 'image'))) }}",
+              "additionalFields": {
+                "caption": "=Main photo · {{ $('Plan the content').first().json.output.summary }}"
+              }
+            },
+            {
+              "type": "photo",
+              "media": "={{ (o => o && o.media && o.media.urls ? o.media.urls.download : '')($('Carousel ready').last().json.edits[0].outputs.find((o => o.kind === 'image'))) }}",
+              "additionalFields": {}
+            },
+            {
+              "type": "photo",
+              "media": "={{ (o => o && o.media && o.media.urls ? o.media.urls.download : '')($('Carousel ready').last().json.edits[1].outputs.find((o => o.kind === 'image'))) }}",
+              "additionalFields": {}
+            },
+            {
+              "type": "photo",
+              "media": "={{ (o => o && o.media && o.media.urls ? o.media.urls.download : '')($('Carousel ready').last().json.edits[2].outputs.find((o => o.kind === 'image'))) }}",
+              "additionalFields": {}
+            },
+            {
+              "type": "photo",
+              "media": "={{ (o => o && o.media && o.media.urls ? o.media.urls.download : '')($('Story').last().json.outputs.find((o => o.kind === 'image'))) }}",
+              "additionalFields": {
+                "caption": "Story"
+              }
+            }
+          ]
+        },
+        "additionalFields": {}
+      },
+      "id": "320a213e-1a93-5838-970a-4434911b0893",
+      "name": "Send the pictures",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": 20,
+        "unit": "seconds"
+      },
+      "id": "2f7c033c-c6cf-521d-908a-67611a1f1fd8",
+      "name": "Let the MP4 finish",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3460,
+        0
+      ],
+      "webhookId": "a4283f71-ecc5-5c8b-bbee-6b49c37b2860"
+    },
+    {
+      "parameters": {
+        "resource": "media",
+        "operation": "get",
+        "mediaId": "={{ $('Wait for the Reel').last().json.body.data.outputs.find(o => o.kind === 'video').media_id }}"
+      },
+      "id": "208ccf72-3879-52b3-a865-16bbdf6129b9",
+      "name": "Is the MP4 there?",
+      "type": "n8n-nodes-nevermanual.neverManual",
+      "typeVersion": 1,
+      "position": [
+        3680,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "HEAD",
+        "url": "={{ $json.urls?.preview || $json.urls?.download }}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "84108b8c-3ef4-573b-a810-a4b702bf61c7",
+      "name": "Does it play?",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3900,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e790d99a-17c6-54b5-a540-f1b9766bf71e",
+              "leftValue": "={{ ($json.statusCode === 200 && !!$('Is the MP4 there?').last().json.urls?.preview) || $runIndex >= 9 }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "5eb0653b-8681-5d42-b15f-fbee462babde",
+      "name": "MP4 ready?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4120,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "sendVideo",
+        "chatId": "={{ $('Settings').first().json.message.chat.id }}",
+        "file": "={{ $('Is the MP4 there?').last().json.urls.preview || $('Is the MP4 there?').last().json.urls.download }}",
+        "additionalFields": {
+          "caption": "Reel, with the hook Studio wrote from its frames",
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "7d5642fd-46cb-5f0d-84ef-5daf4b036786",
+      "name": "Send the Reel",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        4340,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "={{ $('Settings').first().json.message.chat.id }}",
+        "message": "=Ready: {{ $('Plan the content').first().json.output.summary }}. Post it everywhere, or make the photo or the video again?",
+        "responseType": "customForm",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "What next?",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Post everywhere"
+                  },
+                  {
+                    "option": "New photo"
+                  },
+                  {
+                    "option": "New video"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "What to change",
+              "placeholder": "Only for a new one, e.g. she laughs and waves"
+            }
+          ]
+        },
+        "options": {
+          "limitWaitTime": {
+            "values": {
+              "limitType": "afterTimeInterval",
+              "resumeAmount": 12,
+              "resumeUnit": "hours"
+            }
+          },
+          "appendAttribution": false,
+          "messageButtonLabel": "Answer"
+        }
+      },
+      "id": "cd61af49-8fb6-598c-a5fc-b167a7df0ddb",
+      "name": "Post it?",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        4560,
+        0
+      ],
+      "webhookId": "4750e997-9549-575b-ac18-f096caf2d244"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f0118ff2-cb00-5029-8680-56280c771e5d",
+                    "leftValue": "={{ $json.data?.['What next?'] }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "rightValue": "Post everywhere"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Post everywhere"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e8fa8a2e-970a-555b-a747-2440b657908c",
+                    "leftValue": "={{ $json.data?.['What next?'] }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "rightValue": "New photo"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "New photo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9410516d-a63a-5d0d-955e-4776617073e5",
+                    "leftValue": "={{ $json.data?.['What next?'] }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "rightValue": "New video"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "New video"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "29dc6ecd-3817-52a4-b2e0-5a459d686211",
+      "name": "Answer",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        4780,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "slatePost",
+        "operation": "create",
+        "accounts": "={{ [$('Settings').first().json.instagram_account] }}",
+        "media": "={{ [$('Main photo').last().json.outputs.find((o => o.kind === 'image')).media_id, ...$('Carousel ready').last().json.edits.map(r => r.outputs.find((o => o.kind === 'image')).media_id)].join(',') }}",
+        "text": "",
+        "when": "queue",
+        "kind": "carousel",
+        "hold": false
+      },
+      "id": "a23a92f5-d1cf-5270-8da0-ddff8c35c015",
+      "name": "Instagram carousel",
+      "type": "n8n-nodes-nevermanual.neverManual",
+      "typeVersion": 1,
+      "position": [
+        5040,
+        -400
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "slatePost",
+        "operation": "create",
+        "accounts": "={{ [$('Settings').first().json.instagram_account] }}",
+        "media": "={{ $('Wait for the Reel').last().json.body.data.outputs.find(o => o.kind === 'video').media_id }}",
+        "text": "",
+        "when": "queue",
+        "kind": "feed",
+        "hold": false
+      },
+      "id": "598d77e8-6328-5b4e-a5be-84d8b947da3c",
+      "name": "Instagram Reel",
+      "type": "n8n-nodes-nevermanual.neverManual",
+      "typeVersion": 1,
+      "position": [
+        5040,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "slatePost",
+        "operation": "create",
+        "accounts": "={{ [$('Settings').first().json.instagram_account] }}",
+        "media": "={{ $('Story').last().json.outputs.find((o => o.kind === 'image')).media_id }}",
+        "text": "",
+        "when": "queue",
+        "kind": "story",
+        "hold": false
+      },
+      "id": "9245707a-a641-508e-844a-74df4fe161f6",
+      "name": "Instagram story",
+      "type": "n8n-nodes-nevermanual.neverManual",
+      "typeVersion": 1,
+      "position": [
+        5040,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "slatePost",
+        "operation": "create",
+        "accounts": "={{ [$('Settings').first().json.tiktok_account] }}",
+        "media": "={{ $('Wait for the Reel').last().json.body.data.outputs.find(o => o.kind === 'video').media_id }}",
+        "text": "",
+        "when": "queue",
+        "kind": "feed",
+        "hold": false
+      },
+      "id": "98aad681-c877-5232-b4ed-6d18e8ea5f64",
+      "name": "TikTok",
+      "type": "n8n-nodes-nevermanual.neverManual",
+      "typeVersion": 1,
+      "position": [
+        5040,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "slatePost",
+        "operation": "create",
+        "accounts": "={{ [$('Settings').first().json.x_account] }}",
+        "media": "={{ $('Main photo').last().json.outputs.find((o => o.kind === 'image')).media_id }}",
+        "text": "",
+        "when": "queue",
+        "kind": "feed",
+        "hold": false
+      },
+      "id": "f4833344-45a1-5edf-813a-91504f4c5d0a",
+      "name": "X",
+      "type": "n8n-nodes-nevermanual.neverManual",
+      "typeVersion": 1,
+      "position": [
+        5040,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "slatePost",
+        "operation": "create",
+        "accounts": "={{ [$('Settings').first().json.threads_account] }}",
+        "media": "={{ [$('Main photo').last().json.outputs.find((o => o.kind === 'image')).media_id, ...$('Carousel ready').last().json.edits.map(r => r.outputs.find((o => o.kind === 'image')).media_id)].join(',') }}",
+        "text": "",
+        "when": "queue",
+        "kind": "carousel",
+        "hold": false
+      },
+      "id": "e00a2945-5984-5d33-b3e7-4dc157690f56",
+      "name": "Threads",
+      "type": "n8n-nodes-nevermanual.neverManual",
+      "typeVersion": 1,
+      "position": [
+        5040,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "slatePost",
+        "operation": "create",
+        "accounts": "={{ [$('Settings').first().json.bluesky_account] }}",
+        "media": "={{ $('Main photo').last().json.outputs.find((o => o.kind === 'image')).media_id }}",
+        "text": "",
+        "when": "queue",
+        "kind": "feed",
+        "hold": false
+      },
+      "id": "178882ab-9e7a-5cb1-84e9-0710c9623f52",
+      "name": "Bluesky (cloud phone)",
+      "type": "n8n-nodes-nevermanual.neverManual",
+      "typeVersion": 1,
+      "position": [
+        5040,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "numberInputs": 7
+      },
+      "id": "a32fd57e-153f-5068-9f1e-fda6b142c523",
+      "name": "All posts queued",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        5300,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Settings').first().json.message.chat.id }}",
+        "text": "=Queued {{ $input.all().length }} posts. Each one comes back here when it goes out.",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "6fb79207-34ad-5c92-b3d5-947b443a8f09",
+      "name": "Say what was queued",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        5520,
+        200
+      ],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5335ad1b-c270-5130-8147-02898ad524bf",
+              "leftValue": "={{ [$json.instagram_account, $json.tiktok_account, $json.x_account, $json.threads_account, $json.bluesky_account].includes($json.data.account_id) }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "6c4f5459-d454-58e4-85c8-423587431c9a",
+      "name": "One of ours?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        700
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6455842b-e913-510d-b50d-a4d03f603b1f",
+              "leftValue": "={{ $json.data.screenshot }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "4b1bec75-8d1f-5d10-a883-8745de5b0f99",
+      "name": "With a screenshot?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        940,
+        700
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "={{ $('Settings').first().json.telegram_chat_id }}",
+        "file": "={{ $json.data.screenshot }}",
+        "additionalFields": {
+          "caption": "={{ (t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))($json.type === 'post.published' ? 'Posted on ' + ({ [$json.instagram_account]: 'Instagram', [$json.tiktok_account]: 'TikTok', [$json.x_account]: 'X', [$json.threads_account]: 'Threads', [$json.bluesky_account]: 'Bluesky' })[$json.data.account_id] : 'Not posted on ' + ({ [$json.instagram_account]: 'Instagram', [$json.tiktok_account]: 'TikTok', [$json.x_account]: 'X', [$json.threads_account]: 'Threads', [$json.bluesky_account]: 'Bluesky' })[$json.data.account_id] + ': ' + ($json.data.error || 'no reason given')) }}{{ $json.data.url ? '\\n' + (t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))($json.data.url) : '' }}{{ $json.data.fields?.reply ? '\\nReplied to a comment: ' + (t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))($json.data.fields.reply) : '' }}",
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "e248a0bd-b5f5-5a6a-939c-c16ca140035c",
+      "name": "Send the phone's screenshot",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1160,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Settings').first().json.telegram_chat_id }}",
+        "text": "={{ (t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))($json.type === 'post.published' ? 'Posted on ' + ({ [$json.instagram_account]: 'Instagram', [$json.tiktok_account]: 'TikTok', [$json.x_account]: 'X', [$json.threads_account]: 'Threads', [$json.bluesky_account]: 'Bluesky' })[$json.data.account_id] : 'Not posted on ' + ({ [$json.instagram_account]: 'Instagram', [$json.tiktok_account]: 'TikTok', [$json.x_account]: 'X', [$json.threads_account]: 'Threads', [$json.bluesky_account]: 'Bluesky' })[$json.data.account_id] + ': ' + ($json.data.error || 'no reason given')) }}{{ $json.data.url ? '\\n' + (t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))($json.data.url) : '' }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "78b03c49-27b2-58d6-9a0b-872b21d1668a",
+      "name": "Say how it went",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1160,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## One idea → photo, carousel, Reel and story on every network\n\nSend one line to your Telegram bot. An AI agent plans the day, Never Manual **Studio** makes everything on GPUs, you approve it in Telegram, and **Slate** posts it to Instagram, TikTok, X and Threads by API and to Bluesky from the real app on a cloud phone.\n\n### How it works\n1. **Telegram**: your idea, e.g. *Kiki tries ramen on a rainy evening*.\n2. **AI Agent** writes the photo's scene, three carousel edits, the video's motion and the story's words.\n3. **Studio** makes the main photo with your own ComfyUI workflow, three edits of it, a story and a Reel with sound and an AI-written hook (two built-in pipelines). It calls back when the Reel is done.\n4. **Telegram** shows you all of it: post, or make the photo or the video again.\n5. **Slate** queues the posts; each account writes its own caption. On Bluesky an AI agent posts in the app and replies to new comments.\n6. Every post that goes out comes back to Telegram, the phone's with a screenshot.\n\n### Setup\n1. Install the verified community node `n8n-nodes-nevermanual` and add your Never Manual API key.\n2. Import the [ComfyUI workflow file](https://github.com/nevermanual/n8n-nodes-nevermanual/tree/main/templates/one-idea-everywhere) into Studio; put its ID in **Settings**.\n3. Connect your accounts in Slate, put their IDs in **Settings**, delete Post nodes you don't use.\n4. Make a bot with @BotFather, add it as the Telegram credential; put your chat ID in the trigger and **Settings**.\n5. Add an OpenAI credential to **Chat model**, or swap it for OpenRouter Chat Model.\n6. Publish, then pick this workflow as its own Error workflow in Workflow settings.\n\n### Customization\nChange the character and the prompts in **Settings** and the agent; any Studio workflow can make the photo.",
+        "height": 1340,
+        "width": 520,
+        "color": 1
+      },
+      "id": "d2c4a123-289c-511e-9026-24da0b0a4fa2",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -600,
+        -360
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Idea or post report\nA message to your bot starts the day's set. When a post goes out, Never Manual calls back and the same workflow reports it.",
+        "height": 480,
+        "width": 700,
+        "color": 7
+      },
+      "id": "a7ee721b-24e5-52c2-aa8e-73f73383f79c",
+      "name": "Section: idea",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Plan with an AI agent\nOne structured answer feeds every Studio step: the scene, three edits, the motion, the story's words.",
+        "height": 560,
+        "width": 520,
+        "color": 7
+      },
+      "id": "acf16114-897a-5f02-91a8-b489e6efe574",
+      "name": "Section: plan",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        680,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Make it in Studio\nYour ComfyUI workflow makes the main photo, Nano Banana edit makes the carousel, built-in pipelines make the story and the Reel. Files stay in Media; only IDs travel. The Reel calls back instead of being polled.",
+        "height": 560,
+        "width": 1700,
+        "color": 7
+      },
+      "id": "cef844be-d485-5415-a311-efd59a9d4952",
+      "name": "Section: studio",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1220,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Look before it goes out\nThe pictures and the Reel arrive in Telegram. *New photo* or *New video* makes that part again with your note.",
+        "height": 560,
+        "width": 1940,
+        "color": 7
+      },
+      "id": "b00df5b4-e608-5e68-9fb1-645547b794de",
+      "name": "Section: review",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2960,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Post everywhere with Slate\nInstagram, TikTok, X and Threads by API. Bluesky has no API here: an AI agent posts in the app on a cloud phone by the account's preset, then replies to new comments under the last post. Captions: each account's Autofill.",
+        "height": 1580,
+        "width": 760,
+        "color": 7
+      },
+      "id": "3f8a1cae-f28c-5284-a73d-cfbf6ee43a8a",
+      "name": "Section: post",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4980,
+        -560
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Report each post\nOnly posts of the accounts in **Settings**. The phone's post comes with the screenshot of its last screen and what it replied.",
+        "height": 520,
+        "width": 700,
+        "color": 7
+      },
+      "id": "f8d6d6a2-23ef-543c-8e30-9852eb2c8623",
+      "name": "Section: report",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        680,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## When something fails\nEach Studio step tries twice. Then this Error Trigger says where and why in Telegram. Set it once: Workflow settings → Error workflow → this workflow.",
+        "height": 300,
+        "width": 1000,
+        "color": 7
+      },
+      "id": "5561be67-2406-58c1-b995-cb81680bb784",
+      "name": "Section: failure",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        1000
+      ]
+    }
+  ],
+  "connections": {
+    "Idea from Telegram": {
+      "main": [
+        [
+          {
+            "node": "Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "A post went out or failed": {
+      "main": [
+        [
+          {
+            "node": "Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Something failed": {
+      "main": [
+        [
+          {
+            "node": "Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Settings": {
+      "main": [
+        [
+          {
+            "node": "Idea or post?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Idea or post?": {
+      "main": [
+        [
+          {
+            "node": "Got it",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "One of ours?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Say what failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Got it": {
+      "main": [
+        [
+          {
+            "node": "Plan the content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Plan the content",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Plan format": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Plan the content",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Plan the content": {
+      "main": [
+        [
+          {
+            "node": "Main photo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Main photo": {
+      "main": [
+        [
+          {
+            "node": "Carousel edits",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Carousel edits": {
+      "main": [
+        [
+          {
+            "node": "One edit at a time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "One edit at a time": {
+      "main": [
+        [
+          {
+            "node": "Edit the photo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit the photo": {
+      "main": [
+        [
+          {
+            "node": "Carousel ready",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Carousel ready": {
+      "main": [
+        [
+          {
+            "node": "Story",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Story": {
+      "main": [
+        [
+          {
+            "node": "Reel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reel": {
+      "main": [
+        [
+          {
+            "node": "Wait for the Reel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for the Reel": {
+      "main": [
+        [
+          {
+            "node": "Reel made?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reel made?": {
+      "main": [
+        [
+          {
+            "node": "Send the pictures",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "The Reel did not come",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send the pictures": {
+      "main": [
+        [
+          {
+            "node": "Let the MP4 finish",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Let the MP4 finish": {
+      "main": [
+        [
+          {
+            "node": "Is the MP4 there?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is the MP4 there?": {
+      "main": [
+        [
+          {
+            "node": "Does it play?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Does it play?": {
+      "main": [
+        [
+          {
+            "node": "MP4 ready?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MP4 ready?": {
+      "main": [
+        [
+          {
+            "node": "Send the Reel",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Let the MP4 finish",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send the Reel": {
+      "main": [
+        [
+          {
+            "node": "Post it?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post it?": {
+      "main": [
+        [
+          {
+            "node": "Answer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Answer": {
+      "main": [
+        [
+          {
+            "node": "Instagram carousel",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Instagram Reel",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Instagram story",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "TikTok",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "X",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Threads",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Bluesky (cloud phone)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Main photo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Instagram carousel": {
+      "main": [
+        [
+          {
+            "node": "All posts queued",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Instagram Reel": {
+      "main": [
+        [
+          {
+            "node": "All posts queued",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Instagram story": {
+      "main": [
+        [
+          {
+            "node": "All posts queued",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "TikTok": {
+      "main": [
+        [
+          {
+            "node": "All posts queued",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "X": {
+      "main": [
+        [
+          {
+            "node": "All posts queued",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Threads": {
+      "main": [
+        [
+          {
+            "node": "All posts queued",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    },
+    "Bluesky (cloud phone)": {
+      "main": [
+        [
+          {
+            "node": "All posts queued",
+            "type": "main",
+            "index": 6
+          }
+        ]
+      ]
+    },
+    "All posts queued": {
+      "main": [
+        [
+          {
+            "node": "Say what was queued",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "One of ours?": {
+      "main": [
+        [
+          {
+            "node": "With a screenshot?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "With a screenshot?": {
+      "main": [
+        [
+          {
+            "node": "Send the phone's screenshot",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Say how it went",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}
