@@ -78,7 +78,7 @@
               "type": "number"
             },
             {
-              "id": "08f0002f-0a88-5530-8781-8580c85814c9",
+              "id": "dc519d95-2511-52c0-8527-5e613adb3fdf",
               "name": "tiktok_account",
               "value": 0,
               "type": "number"
@@ -96,7 +96,7 @@
               "type": "number"
             },
             {
-              "id": "17a86107-1157-5411-8d2d-83da83f7f99d",
+              "id": "ea0add5b-f9c1-54d2-9bca-06d376bb8051",
               "name": "bluesky_account",
               "value": 0,
               "type": "number"
@@ -203,7 +203,7 @@
                 },
                 "conditions": [
                   {
-                    "id": "70ce0079-7304-5968-88c1-1cf0e3bb885d",
+                    "id": "cc22a62d-d169-5890-af4e-1d3b3cc76d04",
                     "leftValue": "={{ $json.execution?.error?.message }}",
                     "operator": {
                       "type": "string",
@@ -788,7 +788,7 @@
                 },
                 "conditions": [
                   {
-                    "id": "f0118ff2-cb00-5029-8680-56280c771e5d",
+                    "id": "d94e51f8-630e-55fe-a17e-dfc2df5d33c0",
                     "leftValue": "={{ $json.data?.['What next?'] }}",
                     "operator": {
                       "type": "string",
@@ -1046,7 +1046,7 @@
           },
           "conditions": [
             {
-              "id": "5335ad1b-c270-5130-8147-02898ad524bf",
+              "id": "85dd3c54-7fab-56e6-ad4d-81e9154a2ff7",
               "leftValue": "={{ [$json.instagram_account, $json.tiktok_account, $json.x_account, $json.threads_account, $json.bluesky_account].includes($json.data.account_id) }}",
               "operator": {
                 "type": "boolean",
