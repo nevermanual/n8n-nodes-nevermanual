@@ -4,10 +4,13 @@ n8n community nodes for [Never Manual](https://api.nevermanual.cloud/docs): run 
 workflows on GPUs, paid from your workspace balance), keep files in the workspace's **Media**, and post them to
 social accounts with **Slate** — and start a workflow when a run ends or a post goes out.
 
-**Verified by n8n:** [Never Manual on n8n.io](https://n8n.io/integrations/never-manual/). A ready template:
-[daily AI character photo from your ComfyUI workflow to Instagram, X and Bluesky](https://github.com/nevermanual/n8n-nodes-nevermanual/tree/main/templates/daily-character-photo),
-with a [written guide](https://nevermanual.cloud/blog/run-comfyui-workflow-from-n8n) and a
-[video](https://youtu.be/uWoa948iCwE).
+**Verified by n8n:** [Never Manual on n8n.io](https://n8n.io/integrations/never-manual/). Ready templates:
+
+- [One idea from Telegram → photo, carousel, Reel and story on every network](https://github.com/nevermanual/n8n-nodes-nevermanual/tree/main/templates/one-idea-everywhere):
+  an AI agent plans, Studio makes, you approve in Telegram, Slate posts by API and from a cloud phone.
+- [Daily AI character photo from your ComfyUI workflow to Instagram, X and Bluesky](https://github.com/nevermanual/n8n-nodes-nevermanual/tree/main/templates/daily-character-photo),
+  with a [written guide](https://nevermanual.cloud/blog/run-comfyui-workflow-from-n8n) and a
+  [video](https://youtu.be/uWoa948iCwE).
 
 Two nodes and one credential:
 
