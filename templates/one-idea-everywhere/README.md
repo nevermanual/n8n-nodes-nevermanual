@@ -5,6 +5,8 @@ made, approved by you in Telegram and posted everywhere.
 
 ![The workflow](workflow.png)
 
+**Video:** [a live run and the setup in under 4 minutes](https://youtu.be/oBbdvOPdc-0)
+
 ## What it does
 
 1. **Telegram**: you send an idea, e.g. *Kiki finds a tiny ramen bar on a rainy evening*.

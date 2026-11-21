@@ -33,7 +33,7 @@
       "typeVersion": 1,
       "position": [
         0,
-        700
+        240
       ],
       "webhookId": "9d6fe746-707e-587f-86b4-fdb31a93fb34"
     },
@@ -117,8 +117,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        260,
-        340
+        220,
+        240
       ]
     },
     {
@@ -129,7 +129,7 @@
       "typeVersion": 1,
       "position": [
         0,
-        1100
+        480
       ]
     },
     {
@@ -226,8 +226,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        480,
-        340
+        440,
+        240
       ]
     },
     {
@@ -564,7 +564,7 @@
       "typeVersion": 1.2,
       "position": [
         720,
-        1100
+        940
       ]
     },
     {
@@ -1065,7 +1065,7 @@
       "typeVersion": 2.2,
       "position": [
         720,
-        700
+        580
       ]
     },
     {
@@ -1098,7 +1098,7 @@
       "typeVersion": 2.2,
       "position": [
         940,
-        700
+        580
       ]
     },
     {
@@ -1117,7 +1117,7 @@
       "typeVersion": 1.2,
       "position": [
         1160,
-        620
+        500
       ]
     },
     {
@@ -1135,14 +1135,14 @@
       "typeVersion": 1.2,
       "position": [
         1160,
-        800
+        660
       ]
     },
     {
       "parameters": {
-        "content": "## One idea → photo, carousel, Reel and story on every network\n\nSend one line to your Telegram bot. An AI agent plans the day, Never Manual **Studio** makes everything on GPUs, you approve it in Telegram, and **Slate** posts it to Instagram, TikTok, X and Threads by API and to Bluesky from the real app on a cloud phone.\n\n### How it works\n1. **Telegram**: your idea, e.g. *Kiki tries ramen on a rainy evening*.\n2. **AI Agent** writes the photo's scene, three carousel edits, the video's motion and the story's words.\n3. **Studio** makes the main photo with your own ComfyUI workflow, three edits of it, a story and a Reel with sound and an AI-written hook (two built-in pipelines). It calls back when the Reel is done.\n4. **Telegram** shows you all of it: post, or make the photo or the video again.\n5. **Slate** queues the posts; each account writes its own caption. On Bluesky an AI agent posts in the app and replies to new comments.\n6. Every post that goes out comes back to Telegram, the phone's with a screenshot.\n\n### Setup\n1. Install the verified community node `n8n-nodes-nevermanual` and add your Never Manual API key.\n2. Import the [ComfyUI workflow file](https://github.com/nevermanual/n8n-nodes-nevermanual/tree/main/templates/one-idea-everywhere) into Studio; put its ID in **Settings**.\n3. Connect your accounts in Slate, put their IDs in **Settings**, delete Post nodes you don't use.\n4. Make a bot with @BotFather, add it as the Telegram credential; put your chat ID in the trigger and **Settings**.\n5. Add an OpenAI credential to **Chat model**, or swap it for OpenRouter Chat Model.\n6. Publish, then pick this workflow as its own Error workflow in Workflow settings.\n\n### Customization\nChange the character and the prompts in **Settings** and the agent; any Studio workflow can make the photo.",
-        "height": 1340,
-        "width": 520,
+        "content": "## One Telegram idea → photo, carousel, Reel and story on every network\n\nSend one line to your Telegram bot. An AI agent plans the content, Never Manual **Studio** makes it on GPUs, you approve it in Telegram, and **Slate** posts it to Instagram, TikTok, X, Threads and Bluesky.\n\n### How it works\n1. Your bot gets an idea, e.g. *Kiki tries ramen on a rainy evening*.\n2. An AI agent writes the photo's scene, three carousel edits, the video's motion and the story's words.\n3. Studio makes the photo with your own ComfyUI workflow, three edits of it, a story, and a Reel with sound and an AI-written hook.\n4. Telegram shows you everything: post it, or redo the photo or the video with a note.\n5. Slate queues one post per network, each with its own caption. On Bluesky an AI agent posts in the real app on a cloud phone and replies to new comments.\n6. Each post comes back to Telegram, the phone's with a screenshot.\n\n### Setup\n- [ ] Install the verified node `n8n-nodes-nevermanual` and add your Never Manual API key\n- [ ] Import the [ComfyUI workflow](https://github.com/nevermanual/n8n-nodes-nevermanual/tree/main/templates/one-idea-everywhere) into Studio and put its ID in **Settings**\n- [ ] Connect your accounts in Slate and put their IDs in **Settings**; delete Post nodes you don't need\n- [ ] Create a bot with @BotFather, add it as the Telegram credential, put your chat ID in the trigger and **Settings**\n- [ ] Add an OpenAI or OpenRouter model to **Chat model**\n- [ ] Publish, then pick this workflow as its own Error workflow\n\n### Customization\nChange the character and prompts in **Settings** and the agent's instructions. One idea costs about $0.29 in Studio and takes about 15 minutes.\n\n@[youtube](oBbdvOPdc-0)",
+        "height": 1030,
+        "width": 900,
         "color": 1
       },
       "id": "d2c4a123-289c-511e-9026-24da0b0a4fa2",
@@ -1150,31 +1150,47 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -600,
-        -360
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Idea or post report\nA message to your bot starts the day's set. When a post goes out, Never Manual calls back and the same workflow reports it.",
-        "height": 480,
-        "width": 700,
-        "color": 7
-      },
-      "id": "a7ee721b-24e5-52c2-aa8e-73f73383f79c",
-      "name": "Section: idea",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -40,
+        -1020,
         -200
       ]
     },
     {
       "parameters": {
-        "content": "## Plan with an AI agent\nOne structured answer feeds every Studio step: the scene, three edits, the motion, the story's words.",
+        "content": "## 1. Start\nAn idea, a post that went out, or a failure. **Settings** holds your IDs.",
+        "height": 840,
+        "width": 620,
+        "color": 7
+      },
+      "id": "60e66b1b-f5a5-5cd0-9bd4-d4a6486df7dd",
+      "name": "Section: start",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## ⚠️ Before the first run\nFill in **Settings**: your chat ID, the Studio workflow ID and the account IDs. After you Publish, set this workflow as its own Error workflow.",
+        "height": 160,
+        "width": 620,
+        "color": 3
+      },
+      "id": "1fcccb28-20a1-584d-9098-ad764b68a2c8",
+      "name": "Warning: before the first run",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 2. Plan with an AI agent\nOne structured answer feeds every Studio step.",
         "height": 560,
-        "width": 520,
+        "width": 540,
         "color": 7
       },
       "id": "acf16114-897a-5f02-91a8-b489e6efe574",
@@ -1188,9 +1204,9 @@
     },
     {
       "parameters": {
-        "content": "## Make it in Studio\nYour ComfyUI workflow makes the main photo, Nano Banana edit makes the carousel, built-in pipelines make the story and the Reel. Files stay in Media; only IDs travel. The Reel calls back instead of being polled.",
+        "content": "## 3. Make it in Studio\nYour ComfyUI workflow, Nano Banana edits and two built-in pipelines. The Reel calls back when it is done.",
         "height": 560,
-        "width": 1700,
+        "width": 1680,
         "color": 7
       },
       "id": "cef844be-d485-5415-a311-efd59a9d4952",
@@ -1198,13 +1214,13 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1220,
+        1240,
         -200
       ]
     },
     {
       "parameters": {
-        "content": "## Look before it goes out\nThe pictures and the Reel arrive in Telegram. *New photo* or *New video* makes that part again with your note.",
+        "content": "## 4. Look before it goes out\nPost it, or redo the photo or the Reel with a note.",
         "height": 560,
         "width": 1940,
         "color": 7
@@ -1220,7 +1236,7 @@
     },
     {
       "parameters": {
-        "content": "## Post everywhere with Slate\nInstagram, TikTok, X and Threads by API. Bluesky has no API here: an AI agent posts in the app on a cloud phone by the account's preset, then replies to new comments under the last post. Captions: each account's Autofill.",
+        "content": "## 5. Post everywhere with Slate\nBy API, and on Bluesky from the real app on a cloud phone.",
         "height": 1580,
         "width": 760,
         "color": 7
@@ -1236,9 +1252,9 @@
     },
     {
       "parameters": {
-        "content": "## Report each post\nOnly posts of the accounts in **Settings**. The phone's post comes with the screenshot of its last screen and what it replied.",
-        "height": 520,
-        "width": 700,
+        "content": "## 6. Report each post\nThe phone's post comes with a screenshot.",
+        "height": 400,
+        "width": 640,
         "color": 7
       },
       "id": "f8d6d6a2-23ef-543c-8e30-9852eb2c8623",
@@ -1247,14 +1263,14 @@
       "typeVersion": 1,
       "position": [
         680,
-        480
+        400
       ]
     },
     {
       "parameters": {
-        "content": "## When something fails\nEach Studio step tries twice. Then this Error Trigger says where and why in Telegram. Set it once: Workflow settings → Error workflow → this workflow.",
-        "height": 300,
-        "width": 1000,
+        "content": "## 7. When something fails\nStudio steps try twice, then Telegram gets the reason.",
+        "height": 260,
+        "width": 460,
         "color": 7
       },
       "id": "5561be67-2406-58c1-b995-cb81680bb784",
@@ -1262,8 +1278,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -40,
-        1000
+        680,
+        840
       ]
     }
   ],
