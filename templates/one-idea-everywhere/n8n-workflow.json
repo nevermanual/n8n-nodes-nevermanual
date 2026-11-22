@@ -7,11 +7,11 @@
           "message"
         ],
         "additionalFields": {
-          "chatIds": ""
+          "chatIds": "YOUR_TELEGRAM_CHAT_ID"
         }
       },
       "id": "6796a5a2-6a91-5d50-a46d-29ccf6538e64",
-      "name": "Idea from Telegram",
+      "name": "When Idea Arrives in Telegram",
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
       "position": [
@@ -28,7 +28,7 @@
         ]
       },
       "id": "21213d9a-4210-5164-ac32-dfffffc1d361",
-      "name": "A post went out or failed",
+      "name": "When Post Is Published or Fails",
       "type": "n8n-nodes-nevermanual.neverManualTrigger",
       "typeVersion": 1,
       "position": [
@@ -44,13 +44,13 @@
             {
               "id": "51ac8e95-7e53-53d1-880a-32172841282b",
               "name": "telegram_chat_id",
-              "value": "",
+              "value": "YOUR_TELEGRAM_CHAT_ID",
               "type": "string"
             },
             {
               "id": "4fd6f4e0-e236-5b14-a277-e4369aa3b5a7",
               "name": "photo_workflow",
-              "value": "",
+              "value": "YOUR_STUDIO_WORKFLOW_ID",
               "type": "string"
             },
             {
@@ -113,18 +113,18 @@
         "options": {}
       },
       "id": "fdb0e961-14e0-527f-8134-6c2384bd2b1a",
-      "name": "Settings",
+      "name": "Set Workflow Settings",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        220,
+        272,
         240
       ]
     },
     {
       "parameters": {},
       "id": "2fa4b02e-bc27-52d1-9ac4-1b639a43291b",
-      "name": "Something failed",
+      "name": "When a Step Fails",
       "type": "n8n-nodes-base.errorTrigger",
       "typeVersion": 1,
       "position": [
@@ -222,17 +222,17 @@
         "options": {}
       },
       "id": "8a6bc05d-b1a5-53d2-8dcb-22442eb4541a",
-      "name": "Idea or post?",
+      "name": "Route by Event Type",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        440,
+        544,
         240
       ]
     },
     {
       "parameters": {
-        "chatId": "={{ $('Settings').first().json.message.chat.id }}",
+        "chatId": "={{ $('Set Workflow Settings').first().json.message.chat.id }}",
         "text": "=On it: “{{ (t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))($json.message.text) }}”. The photo, a carousel, a story and a Reel are on the way — I'll send them here for a look in about 15 minutes.",
         "additionalFields": {
           "appendAttribution": false,
@@ -240,29 +240,29 @@
         }
       },
       "id": "42dac934-ebce-5e0f-8692-9e12c4c45b96",
-      "name": "Got it",
+      "name": "Confirm Idea in Telegram",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        720,
+        816,
         0
       ]
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Today's idea: {{ $('Settings').first().json.message.text }}",
+        "text": "=Today's idea: {{ $('Set Workflow Settings').first().json.message.text }}",
         "hasOutputParser": true,
         "options": {
-          "systemMessage": "=You plan one day of social media content for {{ $('Settings').first().json.character }} from one idea. Everything is shown from one main photo, so all parts must fit that single moment.\n\nReturn:\n- scene: 2–3 sentences for the main photo, in a phone-photo style: the shot and the place, what she wears, her expression and what she does, the light. Concrete and ordinary, no fantasy, no text in the picture.\n- carousel_edits: exactly 3 edit instructions for an image editor that changes the main photo into other moments of the same scene. Each one clear sentence starting with a verb, saying what stays, e.g. \"Change the camera to a close-up of her hands holding the cup; keep her clothes, the light and the place.\" Vary them: a close-up, another angle, another moment.\n- motion: 1–3 sentences for a 5-second video made from the main photo: what moves, how the camera goes, what is heard.\n- story_text: 3 to 6 words for an Instagram story over the photo, casual, no hashtags, no emoji.\n- summary: one short line naming the plan for the person who approves it.\nWrite in English."
+          "systemMessage": "=You plan one day of social media content for {{ $('Set Workflow Settings').first().json.character }} from one idea. Everything is shown from one main photo, so all parts must fit that single moment.\n\nReturn:\n- scene: 2–3 sentences for the main photo, in a phone-photo style: the shot and the place, what she wears, her expression and what she does, the light. Concrete and ordinary, no fantasy, no text in the picture.\n- carousel_edits: exactly 3 edit instructions for an image editor that changes the main photo into other moments of the same scene. Each one clear sentence starting with a verb, saying what stays, e.g. \"Change the camera to a close-up of her hands holding the cup; keep her clothes, the light and the place.\" Vary them: a close-up, another angle, another moment.\n- motion: 1–3 sentences for a 5-second video made from the main photo: what moves, how the camera goes, what is heard.\n- story_text: 3 to 6 words for an Instagram story over the photo, casual, no hashtags, no emoji.\n- summary: one short line naming the plan for the person who approves it.\nWrite in English."
         }
       },
       "id": "f50d4c6b-0a66-5f3e-a9a7-10acaa7714c6",
-      "name": "Plan the content",
+      "name": "Content Planner Agent",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.2,
       "position": [
-        940,
+        1040,
         0
       ]
     },
@@ -279,12 +279,12 @@
         }
       },
       "id": "2d90bafe-11c7-50c1-a551-558ae894cd4d",
-      "name": "Chat model",
+      "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
       "position": [
-        880,
-        220
+        976,
+        224
       ]
     },
     {
@@ -293,12 +293,12 @@
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"scene\": {\n      \"type\": \"string\"\n    },\n    \"carousel_edits\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"minItems\": 3,\n      \"maxItems\": 3\n    },\n    \"motion\": {\n      \"type\": \"string\"\n    },\n    \"story_text\": {\n      \"type\": \"string\"\n    },\n    \"summary\": {\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\n    \"scene\",\n    \"carousel_edits\",\n    \"motion\",\n    \"story_text\",\n    \"summary\"\n  ]\n}"
       },
       "id": "0c608340-5501-5a92-bff2-b32dd5b03006",
-      "name": "Plan format",
+      "name": "Structured Plan Parser",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        1060,
-        220
+        1152,
+        224
       ]
     },
     {
@@ -308,10 +308,10 @@
         "workflowId": {
           "__rl": true,
           "mode": "id",
-          "value": "={{ $('Settings').first().json.photo_workflow }}"
+          "value": "={{ $('Set Workflow Settings').first().json.photo_workflow }}"
         },
         "inputSource": "json",
-        "inputsJson": "={{ JSON.stringify({ Prompt: [$('Settings').first().json.photo_prompt_start, $('Plan the content').first().json.output.scene, ($('Post it?').isExecuted ? ($('Post it?').last().json.data['What to change'] || '') : ''), $('Settings').first().json.photo_prompt_end].filter(Boolean).join(' ') }) }}",
+        "inputsJson": "={{ JSON.stringify({ Prompt: [$('Set Workflow Settings').first().json.photo_prompt_start, $('Content Planner Agent').first().json.output.scene, ($('Ask to Post or Redo').isExecuted ? ($('Ask to Post or Redo').last().json.data['What to change'] || '') : ''), $('Set Workflow Settings').first().json.photo_prompt_end].filter(Boolean).join(' ') }) }}",
         "speed": "standard",
         "waitForCompletion": true,
         "timeoutMinutes": 20,
@@ -319,11 +319,11 @@
         "options": {}
       },
       "id": "7d966721-066f-55c8-9577-5e12688a5c1e",
-      "name": "Main photo",
+      "name": "Generate Main Photo in Studio",
       "type": "n8n-nodes-nevermanual.neverManual",
       "typeVersion": 1,
       "position": [
-        1260,
+        1424,
         0
       ],
       "retryOnFail": true,
@@ -343,7 +343,7 @@
             {
               "id": "2d1473a6-d83a-57bb-be86-26351a077e2d",
               "name": "edits",
-              "value": "={{ $('Plan the content').first().json.output.carousel_edits }}",
+              "value": "={{ $('Content Planner Agent').first().json.output.carousel_edits }}",
               "type": "array"
             }
           ]
@@ -351,11 +351,11 @@
         "options": {}
       },
       "id": "e3d8b555-868b-5c02-bbfa-d27e5094f72b",
-      "name": "Carousel edits",
+      "name": "Prepare Carousel Edits",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1480,
+        1648,
         0
       ]
     },
@@ -367,11 +367,11 @@
         "options": {}
       },
       "id": "2cab1f5a-045a-5e62-87fd-2b67a7b90044",
-      "name": "One edit at a time",
+      "name": "Split Carousel Edits",
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        1700,
+        1856,
         0
       ]
     },
@@ -393,11 +393,11 @@
         "options": {}
       },
       "id": "fb843495-1caf-5f39-8c7f-ca299c1db04e",
-      "name": "Edit the photo",
+      "name": "Edit Photo With Nano Banana",
       "type": "n8n-nodes-nevermanual.neverManual",
       "typeVersion": 1,
       "position": [
-        1920,
+        2080,
         0
       ],
       "retryOnFail": true,
@@ -411,11 +411,11 @@
         "options": {}
       },
       "id": "f535fd71-3cb0-536e-975a-be1558d26049",
-      "name": "Carousel ready",
+      "name": "Merge Carousel Photos",
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        2140,
+        2304,
         0
       ]
     },
@@ -429,7 +429,7 @@
           "value": "pipeline/nm-story-from-photo"
         },
         "inputSource": "json",
-        "inputsJson": "={{ JSON.stringify({ Photo: $('Main photo').last().json.outputs.find((o => o.kind === 'image')).media_id, 'Words on it': $('Plan the content').first().json.output.story_text }) }}",
+        "inputsJson": "={{ JSON.stringify({ Photo: $('Generate Main Photo in Studio').last().json.outputs.find((o => o.kind === 'image')).media_id, 'Words on it': $('Content Planner Agent').first().json.output.story_text }) }}",
         "speed": "standard",
         "waitForCompletion": true,
         "timeoutMinutes": 10,
@@ -437,11 +437,11 @@
         "options": {}
       },
       "id": "7cf264c7-48e9-5d2d-b7fe-4390a9c9687b",
-      "name": "Story",
+      "name": "Make Story in Studio",
       "type": "n8n-nodes-nevermanual.neverManual",
       "typeVersion": 1,
       "position": [
-        2360,
+        2528,
         0
       ],
       "retryOnFail": true,
@@ -458,20 +458,20 @@
           "value": "pipeline/nm-reel-from-photo"
         },
         "inputSource": "json",
-        "inputsJson": "={{ JSON.stringify({ Photo: $('Main photo').last().json.outputs.find((o => o.kind === 'image')).media_id, 'What happens': [$('Plan the content').first().json.output.motion, ($('Post it?').isExecuted ? ($('Post it?').last().json.data['What to change'] || '') : '')].filter(Boolean).join(' ') }) }}",
+        "inputsJson": "={{ JSON.stringify({ Photo: $('Generate Main Photo in Studio').last().json.outputs.find((o => o.kind === 'image')).media_id, 'What happens': [$('Content Planner Agent').first().json.output.motion, ($('Ask to Post or Redo').isExecuted ? ($('Ask to Post or Redo').last().json.data['What to change'] || '') : '')].filter(Boolean).join(' ') }) }}",
         "speed": "standard",
         "waitForCompletion": false,
         "options": {
-          "advanced": "={{ JSON.stringify({ 'video.n320.value_4': $('Settings').first().json.video_seconds }) }}",
+          "advanced": "={{ JSON.stringify({ 'video.n320.value_4': $('Set Workflow Settings').first().json.video_seconds }) }}",
           "webhookUrl": "={{ $execution.resumeUrl }}"
         }
       },
       "id": "65c5fd2c-7378-5ba8-b4bf-ced749b4fc10",
-      "name": "Reel",
+      "name": "Start Reel in Studio",
       "type": "n8n-nodes-nevermanual.neverManual",
       "typeVersion": 1,
       "position": [
-        2580,
+        2736,
         0
       ],
       "retryOnFail": true,
@@ -489,11 +489,11 @@
         "options": {}
       },
       "id": "d3179f3e-f7ff-52cd-a6a4-f2e640831f1c",
-      "name": "Wait for the Reel",
+      "name": "Wait for Reel Callback",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        2800,
+        2960,
         0
       ],
       "webhookId": "117b9603-a359-562c-9e15-c0f1fd52753b"
@@ -523,17 +523,17 @@
         "options": {}
       },
       "id": "52bf1d0d-c671-5699-93eb-3a2a5b566b5d",
-      "name": "Reel made?",
+      "name": "If Reel Succeeded",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        3020,
+        3184,
         0
       ]
     },
     {
       "parameters": {
-        "chatId": "={{ $('Settings').first().json.message.chat.id }}",
+        "chatId": "={{ $('Set Workflow Settings').first().json.message.chat.id }}",
         "text": "=The Reel did not come: {{ (t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))($json.body?.data?.error || 'Studio took longer than 45 minutes') }}. Send the idea again to try once more.",
         "additionalFields": {
           "appendAttribution": false,
@@ -541,17 +541,17 @@
         }
       },
       "id": "8977849a-d1bf-5c57-a840-9c38734fbb4a",
-      "name": "The Reel did not come",
+      "name": "Report Reel Failure",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        3240,
-        260
+        3408,
+        256
       ]
     },
     {
       "parameters": {
-        "chatId": "={{ $('Settings').first().json.telegram_chat_id }}",
+        "chatId": "={{ $('Set Workflow Settings').first().json.telegram_chat_id }}",
         "text": "=Something failed at “{{ (t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))($json.execution.lastNodeExecuted) }}”: {{ (t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))($json.execution.error.message) }}",
         "additionalFields": {
           "appendAttribution": false,
@@ -559,45 +559,45 @@
         }
       },
       "id": "786d06d4-d999-54be-aa07-8d6ebe68ce68",
-      "name": "Say what failed",
+      "name": "Report Failed Step",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        720,
-        940
+        800,
+        1072
       ]
     },
     {
       "parameters": {
         "operation": "sendMediaGroup",
-        "chatId": "={{ $('Settings').first().json.message.chat.id }}",
+        "chatId": "={{ $('Set Workflow Settings').first().json.message.chat.id }}",
         "media": {
           "media": [
             {
               "type": "photo",
-              "media": "={{ (o => o && o.media && o.media.urls ? o.media.urls.download : '')($('Main photo').last().json.outputs.find((o => o.kind === 'image'))) }}",
+              "media": "={{ (o => o && o.media && o.media.urls ? o.media.urls.download : '')($('Generate Main Photo in Studio').last().json.outputs.find((o => o.kind === 'image'))) }}",
               "additionalFields": {
-                "caption": "=Main photo · {{ $('Plan the content').first().json.output.summary }}"
+                "caption": "=Main photo · {{ $('Content Planner Agent').first().json.output.summary }}"
               }
             },
             {
               "type": "photo",
-              "media": "={{ (o => o && o.media && o.media.urls ? o.media.urls.download : '')($('Carousel ready').last().json.edits[0].outputs.find((o => o.kind === 'image'))) }}",
+              "media": "={{ (o => o && o.media && o.media.urls ? o.media.urls.download : '')($('Merge Carousel Photos').last().json.edits[0].outputs.find((o => o.kind === 'image'))) }}",
               "additionalFields": {}
             },
             {
               "type": "photo",
-              "media": "={{ (o => o && o.media && o.media.urls ? o.media.urls.download : '')($('Carousel ready').last().json.edits[1].outputs.find((o => o.kind === 'image'))) }}",
+              "media": "={{ (o => o && o.media && o.media.urls ? o.media.urls.download : '')($('Merge Carousel Photos').last().json.edits[1].outputs.find((o => o.kind === 'image'))) }}",
               "additionalFields": {}
             },
             {
               "type": "photo",
-              "media": "={{ (o => o && o.media && o.media.urls ? o.media.urls.download : '')($('Carousel ready').last().json.edits[2].outputs.find((o => o.kind === 'image'))) }}",
+              "media": "={{ (o => o && o.media && o.media.urls ? o.media.urls.download : '')($('Merge Carousel Photos').last().json.edits[2].outputs.find((o => o.kind === 'image'))) }}",
               "additionalFields": {}
             },
             {
               "type": "photo",
-              "media": "={{ (o => o && o.media && o.media.urls ? o.media.urls.download : '')($('Story').last().json.outputs.find((o => o.kind === 'image'))) }}",
+              "media": "={{ (o => o && o.media && o.media.urls ? o.media.urls.download : '')($('Make Story in Studio').last().json.outputs.find((o => o.kind === 'image'))) }}",
               "additionalFields": {
                 "caption": "Story"
               }
@@ -607,12 +607,12 @@
         "additionalFields": {}
       },
       "id": "320a213e-1a93-5838-970a-4434911b0893",
-      "name": "Send the pictures",
+      "name": "Send Photos to Telegram",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        3240,
-        0
+        3248,
+        -304
       ]
     },
     {
@@ -622,12 +622,12 @@
         "unit": "seconds"
       },
       "id": "2f7c033c-c6cf-521d-908a-67611a1f1fd8",
-      "name": "Let the MP4 finish",
+      "name": "Wait 20 Seconds for MP4",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        3460,
-        0
+        3456,
+        -304
       ],
       "webhookId": "a4283f71-ecc5-5c8b-bbee-6b49c37b2860"
     },
@@ -635,15 +635,15 @@
       "parameters": {
         "resource": "media",
         "operation": "get",
-        "mediaId": "={{ $('Wait for the Reel').last().json.body.data.outputs.find(o => o.kind === 'video').media_id }}"
+        "mediaId": "={{ $('Wait for Reel Callback').last().json.body.data.outputs.find(o => o.kind === 'video').media_id }}"
       },
       "id": "208ccf72-3879-52b3-a865-16bbdf6129b9",
-      "name": "Is the MP4 there?",
+      "name": "Get Reel From Media",
       "type": "n8n-nodes-nevermanual.neverManual",
       "typeVersion": 1,
       "position": [
         3680,
-        0
+        -304
       ]
     },
     {
@@ -660,12 +660,12 @@
         }
       },
       "id": "84108b8c-3ef4-573b-a810-a4b702bf61c7",
-      "name": "Does it play?",
+      "name": "Check Reel MP4 Link",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        3900,
-        0
+        3904,
+        -304
       ]
     },
     {
@@ -680,7 +680,7 @@
           "conditions": [
             {
               "id": "e790d99a-17c6-54b5-a540-f1b9766bf71e",
-              "leftValue": "={{ ($json.statusCode === 200 && !!$('Is the MP4 there?').last().json.urls?.preview) || $runIndex >= 9 }}",
+              "leftValue": "={{ ($json.statusCode === 200 && !!$('Get Reel From Media').last().json.urls?.preview) || $runIndex >= 9 }}",
               "operator": {
                 "type": "boolean",
                 "operation": "true",
@@ -693,38 +693,38 @@
         "options": {}
       },
       "id": "5eb0653b-8681-5d42-b15f-fbee462babde",
-      "name": "MP4 ready?",
+      "name": "If Reel MP4 Plays",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        4120,
-        0
+        4128,
+        -304
       ]
     },
     {
       "parameters": {
         "operation": "sendVideo",
-        "chatId": "={{ $('Settings').first().json.message.chat.id }}",
-        "file": "={{ $('Is the MP4 there?').last().json.urls.preview || $('Is the MP4 there?').last().json.urls.download }}",
+        "chatId": "={{ $('Set Workflow Settings').first().json.message.chat.id }}",
+        "file": "={{ $('Get Reel From Media').last().json.urls.preview || $('Get Reel From Media').last().json.urls.download }}",
         "additionalFields": {
           "caption": "Reel, with the hook Studio wrote from its frames",
           "parse_mode": "HTML"
         }
       },
       "id": "7d5642fd-46cb-5f0d-84ef-5daf4b036786",
-      "name": "Send the Reel",
+      "name": "Send Reel to Telegram",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        4340,
-        0
+        4336,
+        -304
       ]
     },
     {
       "parameters": {
         "operation": "sendAndWait",
-        "chatId": "={{ $('Settings').first().json.message.chat.id }}",
-        "message": "=Ready: {{ $('Plan the content').first().json.output.summary }}. Post it everywhere, or make the photo or the video again?",
+        "chatId": "={{ $('Set Workflow Settings').first().json.message.chat.id }}",
+        "message": "=Ready: {{ $('Content Planner Agent').first().json.output.summary }}. Post it everywhere, or make the photo or the video again?",
         "responseType": "customForm",
         "formFields": {
           "values": [
@@ -765,11 +765,11 @@
         }
       },
       "id": "cd61af49-8fb6-598c-a5fc-b167a7df0ddb",
-      "name": "Post it?",
+      "name": "Ask to Post or Redo",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        4560,
+        4592,
         0
       ],
       "webhookId": "4750e997-9549-575b-ac18-f096caf2d244"
@@ -855,11 +855,11 @@
         "options": {}
       },
       "id": "29dc6ecd-3817-52a4-b2e0-5a459d686211",
-      "name": "Answer",
+      "name": "Route by Answer",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        4780,
+        4816,
         0
       ]
     },
@@ -867,15 +867,15 @@
       "parameters": {
         "resource": "slatePost",
         "operation": "create",
-        "accounts": "={{ [$('Settings').first().json.instagram_account] }}",
-        "media": "={{ [$('Main photo').last().json.outputs.find((o => o.kind === 'image')).media_id, ...$('Carousel ready').last().json.edits.map(r => r.outputs.find((o => o.kind === 'image')).media_id)].join(',') }}",
+        "accounts": "={{ [$('Set Workflow Settings').first().json.instagram_account] }}",
+        "media": "={{ [$('Generate Main Photo in Studio').last().json.outputs.find((o => o.kind === 'image')).media_id, ...$('Merge Carousel Photos').last().json.edits.map(r => r.outputs.find((o => o.kind === 'image')).media_id)].join(',') }}",
         "text": "",
         "when": "queue",
         "kind": "carousel",
         "hold": false
       },
       "id": "a23a92f5-d1cf-5270-8da0-ddff8c35c015",
-      "name": "Instagram carousel",
+      "name": "Queue Instagram Carousel",
       "type": "n8n-nodes-nevermanual.neverManual",
       "typeVersion": 1,
       "position": [
@@ -887,15 +887,15 @@
       "parameters": {
         "resource": "slatePost",
         "operation": "create",
-        "accounts": "={{ [$('Settings').first().json.instagram_account] }}",
-        "media": "={{ $('Wait for the Reel').last().json.body.data.outputs.find(o => o.kind === 'video').media_id }}",
+        "accounts": "={{ [$('Set Workflow Settings').first().json.instagram_account] }}",
+        "media": "={{ $('Wait for Reel Callback').last().json.body.data.outputs.find(o => o.kind === 'video').media_id }}",
         "text": "",
         "when": "queue",
         "kind": "feed",
         "hold": false
       },
       "id": "598d77e8-6328-5b4e-a5be-84d8b947da3c",
-      "name": "Instagram Reel",
+      "name": "Queue Instagram Reel",
       "type": "n8n-nodes-nevermanual.neverManual",
       "typeVersion": 1,
       "position": [
@@ -907,15 +907,15 @@
       "parameters": {
         "resource": "slatePost",
         "operation": "create",
-        "accounts": "={{ [$('Settings').first().json.instagram_account] }}",
-        "media": "={{ $('Story').last().json.outputs.find((o => o.kind === 'image')).media_id }}",
+        "accounts": "={{ [$('Set Workflow Settings').first().json.instagram_account] }}",
+        "media": "={{ $('Make Story in Studio').last().json.outputs.find((o => o.kind === 'image')).media_id }}",
         "text": "",
         "when": "queue",
         "kind": "story",
         "hold": false
       },
       "id": "9245707a-a641-508e-844a-74df4fe161f6",
-      "name": "Instagram story",
+      "name": "Queue Instagram Story",
       "type": "n8n-nodes-nevermanual.neverManual",
       "typeVersion": 1,
       "position": [
@@ -927,15 +927,15 @@
       "parameters": {
         "resource": "slatePost",
         "operation": "create",
-        "accounts": "={{ [$('Settings').first().json.tiktok_account] }}",
-        "media": "={{ $('Wait for the Reel').last().json.body.data.outputs.find(o => o.kind === 'video').media_id }}",
+        "accounts": "={{ [$('Set Workflow Settings').first().json.tiktok_account] }}",
+        "media": "={{ $('Wait for Reel Callback').last().json.body.data.outputs.find(o => o.kind === 'video').media_id }}",
         "text": "",
         "when": "queue",
         "kind": "feed",
         "hold": false
       },
       "id": "98aad681-c877-5232-b4ed-6d18e8ea5f64",
-      "name": "TikTok",
+      "name": "Queue TikTok Video",
       "type": "n8n-nodes-nevermanual.neverManual",
       "typeVersion": 1,
       "position": [
@@ -947,15 +947,15 @@
       "parameters": {
         "resource": "slatePost",
         "operation": "create",
-        "accounts": "={{ [$('Settings').first().json.x_account] }}",
-        "media": "={{ $('Main photo').last().json.outputs.find((o => o.kind === 'image')).media_id }}",
+        "accounts": "={{ [$('Set Workflow Settings').first().json.x_account] }}",
+        "media": "={{ $('Generate Main Photo in Studio').last().json.outputs.find((o => o.kind === 'image')).media_id }}",
         "text": "",
         "when": "queue",
         "kind": "feed",
         "hold": false
       },
       "id": "f4833344-45a1-5edf-813a-91504f4c5d0a",
-      "name": "X",
+      "name": "Queue X Post",
       "type": "n8n-nodes-nevermanual.neverManual",
       "typeVersion": 1,
       "position": [
@@ -967,15 +967,15 @@
       "parameters": {
         "resource": "slatePost",
         "operation": "create",
-        "accounts": "={{ [$('Settings').first().json.threads_account] }}",
-        "media": "={{ [$('Main photo').last().json.outputs.find((o => o.kind === 'image')).media_id, ...$('Carousel ready').last().json.edits.map(r => r.outputs.find((o => o.kind === 'image')).media_id)].join(',') }}",
+        "accounts": "={{ [$('Set Workflow Settings').first().json.threads_account] }}",
+        "media": "={{ [$('Generate Main Photo in Studio').last().json.outputs.find((o => o.kind === 'image')).media_id, ...$('Merge Carousel Photos').last().json.edits.map(r => r.outputs.find((o => o.kind === 'image')).media_id)].join(',') }}",
         "text": "",
         "when": "queue",
         "kind": "carousel",
         "hold": false
       },
       "id": "e00a2945-5984-5d33-b3e7-4dc157690f56",
-      "name": "Threads",
+      "name": "Queue Threads Post",
       "type": "n8n-nodes-nevermanual.neverManual",
       "typeVersion": 1,
       "position": [
@@ -987,15 +987,15 @@
       "parameters": {
         "resource": "slatePost",
         "operation": "create",
-        "accounts": "={{ [$('Settings').first().json.bluesky_account] }}",
-        "media": "={{ $('Main photo').last().json.outputs.find((o => o.kind === 'image')).media_id }}",
+        "accounts": "={{ [$('Set Workflow Settings').first().json.bluesky_account] }}",
+        "media": "={{ $('Generate Main Photo in Studio').last().json.outputs.find((o => o.kind === 'image')).media_id }}",
         "text": "",
         "when": "queue",
         "kind": "feed",
         "hold": false
       },
       "id": "178882ab-9e7a-5cb1-84e9-0710c9623f52",
-      "name": "Bluesky (cloud phone)",
+      "name": "Queue Bluesky Post on Phone",
       "type": "n8n-nodes-nevermanual.neverManual",
       "typeVersion": 1,
       "position": [
@@ -1008,17 +1008,17 @@
         "numberInputs": 7
       },
       "id": "a32fd57e-153f-5068-9f1e-fda6b142c523",
-      "name": "All posts queued",
+      "name": "Merge Queued Posts",
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        5300,
-        200
+        5328,
+        208
       ]
     },
     {
       "parameters": {
-        "chatId": "={{ $('Settings').first().json.message.chat.id }}",
+        "chatId": "={{ $('Set Workflow Settings').first().json.message.chat.id }}",
         "text": "=Queued {{ $input.all().length }} posts. Each one comes back here when it goes out.",
         "additionalFields": {
           "appendAttribution": false,
@@ -1026,12 +1026,12 @@
         }
       },
       "id": "6fb79207-34ad-5c92-b3d5-947b443a8f09",
-      "name": "Say what was queued",
+      "name": "Report Queued Posts",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        5520,
-        200
+        5552,
+        208
       ],
       "executeOnce": true
     },
@@ -1060,12 +1060,12 @@
         "options": {}
       },
       "id": "6c4f5459-d454-58e4-85c8-423587431c9a",
-      "name": "One of ours?",
+      "name": "If Account Is in Settings",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        720,
-        580
+        816,
+        608
       ]
     },
     {
@@ -1093,18 +1093,18 @@
         "options": {}
       },
       "id": "4b1bec75-8d1f-5d10-a883-8745de5b0f99",
-      "name": "With a screenshot?",
+      "name": "If Post Has Screenshot",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        940,
-        580
+        1040,
+        608
       ]
     },
     {
       "parameters": {
         "operation": "sendPhoto",
-        "chatId": "={{ $('Settings').first().json.telegram_chat_id }}",
+        "chatId": "={{ $('Set Workflow Settings').first().json.telegram_chat_id }}",
         "file": "={{ $json.data.screenshot }}",
         "additionalFields": {
           "caption": "={{ (t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))($json.type === 'post.published' ? 'Posted on ' + ({ [$json.instagram_account]: 'Instagram', [$json.tiktok_account]: 'TikTok', [$json.x_account]: 'X', [$json.threads_account]: 'Threads', [$json.bluesky_account]: 'Bluesky' })[$json.data.account_id] : 'Not posted on ' + ({ [$json.instagram_account]: 'Instagram', [$json.tiktok_account]: 'TikTok', [$json.x_account]: 'X', [$json.threads_account]: 'Threads', [$json.bluesky_account]: 'Bluesky' })[$json.data.account_id] + ': ' + ($json.data.error || 'no reason given')) }}{{ $json.data.url ? '\\n' + (t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))($json.data.url) : '' }}{{ $json.data.fields?.reply ? '\\nReplied to a comment: ' + (t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))($json.data.fields.reply) : '' }}",
@@ -1112,17 +1112,17 @@
         }
       },
       "id": "e248a0bd-b5f5-5a6a-939c-c16ca140035c",
-      "name": "Send the phone's screenshot",
+      "name": "Send Phone Screenshot",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1160,
-        500
+        1264,
+        528
       ]
     },
     {
       "parameters": {
-        "chatId": "={{ $('Settings').first().json.telegram_chat_id }}",
+        "chatId": "={{ $('Set Workflow Settings').first().json.telegram_chat_id }}",
         "text": "={{ (t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))($json.type === 'post.published' ? 'Posted on ' + ({ [$json.instagram_account]: 'Instagram', [$json.tiktok_account]: 'TikTok', [$json.x_account]: 'X', [$json.threads_account]: 'Threads', [$json.bluesky_account]: 'Bluesky' })[$json.data.account_id] : 'Not posted on ' + ({ [$json.instagram_account]: 'Instagram', [$json.tiktok_account]: 'TikTok', [$json.x_account]: 'X', [$json.threads_account]: 'Threads', [$json.bluesky_account]: 'Bluesky' })[$json.data.account_id] + ': ' + ($json.data.error || 'no reason given')) }}{{ $json.data.url ? '\\n' + (t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))($json.data.url) : '' }}",
         "additionalFields": {
           "appendAttribution": false,
@@ -1130,19 +1130,19 @@
         }
       },
       "id": "78b03c49-27b2-58d6-9a0b-872b21d1668a",
-      "name": "Say how it went",
+      "name": "Report Post Result",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1160,
-        660
+        1264,
+        688
       ]
     },
     {
       "parameters": {
-        "content": "## One Telegram idea → photo, carousel, Reel and story on every network\n\nSend one line to your Telegram bot. An AI agent plans the content, Never Manual **Studio** makes it on GPUs, you approve it in Telegram, and **Slate** posts it to Instagram, TikTok, X, Threads and Bluesky.\n\n### How it works\n1. Your bot gets an idea, e.g. *Kiki tries ramen on a rainy evening*.\n2. An AI agent writes the photo's scene, three carousel edits, the video's motion and the story's words.\n3. Studio makes the photo with your own ComfyUI workflow, three edits of it, a story, and a Reel with sound and an AI-written hook.\n4. Telegram shows you everything: post it, or redo the photo or the video with a note.\n5. Slate queues one post per network, each with its own caption. On Bluesky an AI agent posts in the real app on a cloud phone and replies to new comments.\n6. Each post comes back to Telegram, the phone's with a screenshot.\n\n### Setup\n- [ ] Install the verified node `n8n-nodes-nevermanual` and add your Never Manual API key\n- [ ] Import the [ComfyUI workflow](https://github.com/nevermanual/n8n-nodes-nevermanual/tree/main/templates/one-idea-everywhere) into Studio and put its ID in **Settings**\n- [ ] Connect your accounts in Slate and put their IDs in **Settings**; delete Post nodes you don't need\n- [ ] Create a bot with @BotFather, add it as the Telegram credential, put your chat ID in the trigger and **Settings**\n- [ ] Add an OpenAI or OpenRouter model to **Chat model**\n- [ ] Publish, then pick this workflow as its own Error workflow\n\n### Customization\nChange the character and prompts in **Settings** and the agent's instructions. One idea costs about $0.29 in Studio and takes about 15 minutes.\n\n@[youtube](oBbdvOPdc-0)",
-        "height": 1030,
-        "width": 900,
+        "content": "## One Telegram idea → photo, carousel, Reel and story on every network\n\n### How it works\nFor creators posting a character or brand on several networks: send your bot one idea, approve the content, and it goes out everywhere.\n\n1. An AI agent plans the photo, three carousel edits, the video and the story.\n2. Never Manual Studio makes the photo with your ComfyUI workflow, the edits, a story and a Reel with sound.\n3. Telegram shows you everything: post it, or redo the photo or video.\n4. Slate queues a post per network with its own caption, by API or on a cloud phone.\n5. Published posts and failed steps report back to Telegram.\n\nLimits: about 15 minutes and $0.30 in Studio per idea; one bot per published workflow; Bluesky needs a cloud phone in Slate.\n\n### Setup\n- [ ] Install the verified node [n8n-nodes-nevermanual](https://docs.n8n.io/integrations/community-nodes/installation/verified-install/) (tested: 0.1.1, n8n 2.47) and add your Never Manual API key\n- [ ] Import the [ComfyUI workflow](https://github.com/nevermanual/n8n-nodes-nevermanual/tree/main/templates/one-idea-everywhere) into Studio and put its ID in **Set Workflow Settings**\n- [ ] Connect your accounts in Slate, put their IDs in **Set Workflow Settings** and delete unused Queue nodes\n- [ ] Make a bot with @BotFather, add its token as the Telegram credential, put your chat ID in the trigger and **Set Workflow Settings**\n- [ ] Add an OpenAI credential to **OpenAI Chat Model**, or use OpenRouter\n- [ ] Publish, then pick this workflow as its own Error workflow\n- [ ] Send your bot an idea and check Slate\n\n### Customization\nEdit the character and photo prompt in **Set Workflow Settings** and the planner's instructions in **Content Planner Agent**.\n\n@[youtube](oBbdvOPdc-0)",
+        "height": 1050,
+        "width": 760,
         "color": 1
       },
       "id": "d2c4a123-289c-511e-9026-24da0b0a4fa2",
@@ -1150,609 +1150,673 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -1020,
-        -200
+        -888,
+        -640
       ]
     },
     {
       "parameters": {
-        "content": "## 1. Start\nAn idea, a post that went out, or a failure. **Settings** holds your IDs.",
-        "height": 840,
-        "width": 620,
+        "content": "## Receive ideas, posts and failures\n\nThree ways in: an idea you send the bot, a post Slate published or could not publish, and a step here that failed.",
+        "height": 880,
+        "width": 240,
         "color": 7
       },
-      "id": "60e66b1b-f5a5-5cd0-9bd4-d4a6486df7dd",
-      "name": "Section: start",
+      "id": "043dd7f9-9bd4-5c35-952a-a6454d7823d2",
+      "name": "Note: Receive ideas, posts and failures",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -60,
-        -200
+        -48,
+        -240
       ]
     },
     {
       "parameters": {
-        "content": "## ⚠️ Before the first run\nFill in **Settings**: your chat ID, the Studio workflow ID and the account IDs. After you Publish, set this workflow as its own Error workflow.",
-        "height": 160,
-        "width": 620,
+        "content": "## Fill in before the first run\n\nYour Telegram chat ID, the Studio workflow ID and the Slate account IDs. The character and the photo prompt's start and end live here too.",
+        "height": 416,
+        "width": 240,
         "color": 3
       },
-      "id": "1fcccb28-20a1-584d-9098-ad764b68a2c8",
-      "name": "Warning: before the first run",
+      "id": "99f313e3-d89b-5eb3-bdbe-24a4e1780209",
+      "name": "Note: Fill in before the first run",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -60,
-        680
+        224,
+        -16
       ]
     },
     {
       "parameters": {
-        "content": "## 2. Plan with an AI agent\nOne structured answer feeds every Studio step.",
-        "height": 560,
-        "width": 540,
+        "content": "## Route each event\n\nIdeas go to planning, Slate's post events to the report, failures to the failure message.",
+        "height": 368,
+        "width": 240,
         "color": 7
       },
-      "id": "acf16114-897a-5f02-91a8-b489e6efe574",
-      "name": "Section: plan",
+      "id": "391f5062-5401-50e2-8827-d793fbea2ab9",
+      "name": "Note: Route each event",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        680,
-        -200
+        496,
+        64
       ]
     },
     {
       "parameters": {
-        "content": "## 3. Make it in Studio\nYour ComfyUI workflow, Nano Banana edits and two built-in pipelines. The Reel calls back when it is done.",
-        "height": 560,
-        "width": 1680,
+        "content": "## Plan the content with AI\n\nReplies at once, then one structured answer sets the scene, three carousel edits, the video's motion and the story's words.",
+        "height": 496,
+        "width": 576,
         "color": 7
       },
-      "id": "cef844be-d485-5415-a311-efd59a9d4952",
-      "name": "Section: studio",
+      "id": "c60dfa2f-1619-5aae-a336-fe498e10a72c",
+      "name": "Note: Plan the content with AI",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1240,
-        -200
+        768,
+        -128
       ]
     },
     {
       "parameters": {
-        "content": "## 4. Look before it goes out\nPost it, or redo the photo or the Reel with a note.",
-        "height": 560,
-        "width": 1940,
+        "content": "## Make the photo and carousel\n\nYour ComfyUI workflow makes the main photo in Studio, then Nano Banana makes three edits of it.",
+        "height": 272,
+        "width": 1072,
         "color": 7
       },
-      "id": "b00df5b4-e608-5e68-9fb1-645547b794de",
-      "name": "Section: review",
+      "id": "0af8db87-95aa-58e2-a2f1-ea34c0f94ed0",
+      "name": "Note: Make the photo and carousel",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        2960,
-        -200
+        1376,
+        -112
       ]
     },
     {
       "parameters": {
-        "content": "## 5. Post everywhere with Slate\nBy API, and on Bluesky from the real app on a cloud phone.",
-        "height": 1580,
-        "width": 760,
+        "content": "## Make the story and Reel\n\nTwo built-in Studio pipelines. The Reel takes minutes and calls this workflow back when it is done or failed.",
+        "height": 528,
+        "width": 1072,
         "color": 7
       },
-      "id": "3f8a1cae-f28c-5284-a73d-cfbf6ee43a8a",
-      "name": "Section: post",
+      "id": "36cd08a6-e60c-5742-b4aa-ed37480099fa",
+      "name": "Note: Make the story and Reel",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        4980,
-        -560
+        2480,
+        -112
       ]
     },
     {
       "parameters": {
-        "content": "## 6. Report each post\nThe phone's post comes with a screenshot.",
-        "height": 400,
+        "content": "## Send everything for review\n\nSends the album, then waits until the Reel's MP4 plays before sending it, since Telegram refuses a file that is not ready.",
+        "height": 272,
+        "width": 1296,
+        "color": 7
+      },
+      "id": "e7b17a39-014f-55e2-8859-eeae8b34edb2",
+      "name": "Note: Send everything for review",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3200,
+        -416
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Ask before anything is posted\n\nA Telegram form: post everywhere, or make a new photo or video with a note on what to change.",
+        "height": 352,
+        "width": 416,
+        "color": 7
+      },
+      "id": "cf98e18d-3d05-5348-a907-18ee460d26f6",
+      "name": "Note: Ask before anything is posted",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4544,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Queue a post per network\n\nSlate posts to Instagram, TikTok, X and Threads by API and to Bluesky from a cloud phone. Delete the networks you don't use.",
+        "height": 1600,
+        "width": 240,
+        "color": 7
+      },
+      "id": "d633c258-51da-50df-8bb1-420e5e985e5f",
+      "name": "Note: Queue a post per network",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4992,
+        -640
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Confirm what was queued\n\nWaits for every queue node, then tells you in Telegram. After deleting a network, lower this merge's number of inputs.",
+        "height": 480,
+        "width": 416,
+        "color": 7
+      },
+      "id": "438e88ad-9ed2-5fa2-98e5-9bb4dd3c197d",
+      "name": "Note: Confirm what was queued",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5280,
+        48
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Report each published post\n\nOnly for the accounts in Settings. A post made on a cloud phone comes with a screenshot of its last screen.",
+        "height": 464,
         "width": 640,
         "color": 7
       },
-      "id": "f8d6d6a2-23ef-543c-8e30-9852eb2c8623",
-      "name": "Section: report",
+      "id": "8da724d4-c9e3-5302-8638-fe6cd1b71887",
+      "name": "Note: Report each published post",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        680,
+        768,
         400
       ]
     },
     {
       "parameters": {
-        "content": "## 7. When something fails\nStudio steps try twice, then Telegram gets the reason.",
-        "height": 260,
-        "width": 460,
+        "content": "## Tell you what failed\n\nEach Studio step tries twice. If one still fails, Telegram gets the step and the reason.",
+        "height": 336,
+        "width": 240,
         "color": 7
       },
-      "id": "5561be67-2406-58c1-b995-cb81680bb784",
-      "name": "Section: failure",
+      "id": "e1410d7f-eb62-59d1-9e67-ffbd4bed0dfc",
+      "name": "Note: Tell you what failed",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        680,
-        840
+        752,
+        896
       ]
     }
   ],
   "connections": {
-    "Idea from Telegram": {
+    "When Idea Arrives in Telegram": {
       "main": [
         [
           {
-            "node": "Settings",
+            "node": "Set Workflow Settings",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "A post went out or failed": {
+    "When Post Is Published or Fails": {
       "main": [
         [
           {
-            "node": "Settings",
+            "node": "Set Workflow Settings",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Something failed": {
+    "When a Step Fails": {
       "main": [
         [
           {
-            "node": "Settings",
+            "node": "Set Workflow Settings",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Settings": {
+    "Set Workflow Settings": {
       "main": [
         [
           {
-            "node": "Idea or post?",
+            "node": "Route by Event Type",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Idea or post?": {
+    "Route by Event Type": {
       "main": [
         [
           {
-            "node": "Got it",
+            "node": "Confirm Idea in Telegram",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "One of ours?",
+            "node": "If Account Is in Settings",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Say what failed",
+            "node": "Report Failed Step",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Got it": {
+    "Confirm Idea in Telegram": {
       "main": [
         [
           {
-            "node": "Plan the content",
+            "node": "Content Planner Agent",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Chat model": {
+    "OpenAI Chat Model": {
       "ai_languageModel": [
         [
           {
-            "node": "Plan the content",
+            "node": "Content Planner Agent",
             "type": "ai_languageModel",
             "index": 0
           }
         ]
       ]
     },
-    "Plan format": {
+    "Structured Plan Parser": {
       "ai_outputParser": [
         [
           {
-            "node": "Plan the content",
+            "node": "Content Planner Agent",
             "type": "ai_outputParser",
             "index": 0
           }
         ]
       ]
     },
-    "Plan the content": {
+    "Content Planner Agent": {
       "main": [
         [
           {
-            "node": "Main photo",
+            "node": "Generate Main Photo in Studio",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Main photo": {
+    "Generate Main Photo in Studio": {
       "main": [
         [
           {
-            "node": "Carousel edits",
+            "node": "Prepare Carousel Edits",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Carousel edits": {
+    "Prepare Carousel Edits": {
       "main": [
         [
           {
-            "node": "One edit at a time",
+            "node": "Split Carousel Edits",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "One edit at a time": {
+    "Split Carousel Edits": {
       "main": [
         [
           {
-            "node": "Edit the photo",
+            "node": "Edit Photo With Nano Banana",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Edit the photo": {
+    "Edit Photo With Nano Banana": {
       "main": [
         [
           {
-            "node": "Carousel ready",
+            "node": "Merge Carousel Photos",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Carousel ready": {
+    "Merge Carousel Photos": {
       "main": [
         [
           {
-            "node": "Story",
+            "node": "Make Story in Studio",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Story": {
+    "Make Story in Studio": {
       "main": [
         [
           {
-            "node": "Reel",
+            "node": "Start Reel in Studio",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Reel": {
+    "Start Reel in Studio": {
       "main": [
         [
           {
-            "node": "Wait for the Reel",
+            "node": "Wait for Reel Callback",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Wait for the Reel": {
+    "Wait for Reel Callback": {
       "main": [
         [
           {
-            "node": "Reel made?",
+            "node": "If Reel Succeeded",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Reel made?": {
+    "If Reel Succeeded": {
       "main": [
         [
           {
-            "node": "Send the pictures",
+            "node": "Send Photos to Telegram",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "The Reel did not come",
+            "node": "Report Reel Failure",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Send the pictures": {
+    "Send Photos to Telegram": {
       "main": [
         [
           {
-            "node": "Let the MP4 finish",
+            "node": "Wait 20 Seconds for MP4",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Let the MP4 finish": {
+    "Wait 20 Seconds for MP4": {
       "main": [
         [
           {
-            "node": "Is the MP4 there?",
+            "node": "Get Reel From Media",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Is the MP4 there?": {
+    "Get Reel From Media": {
       "main": [
         [
           {
-            "node": "Does it play?",
+            "node": "Check Reel MP4 Link",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Does it play?": {
+    "Check Reel MP4 Link": {
       "main": [
         [
           {
-            "node": "MP4 ready?",
+            "node": "If Reel MP4 Plays",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "MP4 ready?": {
+    "If Reel MP4 Plays": {
       "main": [
         [
           {
-            "node": "Send the Reel",
+            "node": "Send Reel to Telegram",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Let the MP4 finish",
+            "node": "Wait 20 Seconds for MP4",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Send the Reel": {
+    "Send Reel to Telegram": {
       "main": [
         [
           {
-            "node": "Post it?",
+            "node": "Ask to Post or Redo",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Post it?": {
+    "Ask to Post or Redo": {
       "main": [
         [
           {
-            "node": "Answer",
+            "node": "Route by Answer",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Answer": {
+    "Route by Answer": {
       "main": [
         [
           {
-            "node": "Instagram carousel",
+            "node": "Queue Instagram Carousel",
             "type": "main",
             "index": 0
           },
           {
-            "node": "Instagram Reel",
+            "node": "Queue Instagram Reel",
             "type": "main",
             "index": 0
           },
           {
-            "node": "Instagram story",
+            "node": "Queue Instagram Story",
             "type": "main",
             "index": 0
           },
           {
-            "node": "TikTok",
+            "node": "Queue TikTok Video",
             "type": "main",
             "index": 0
           },
           {
-            "node": "X",
+            "node": "Queue X Post",
             "type": "main",
             "index": 0
           },
           {
-            "node": "Threads",
+            "node": "Queue Threads Post",
             "type": "main",
             "index": 0
           },
           {
-            "node": "Bluesky (cloud phone)",
+            "node": "Queue Bluesky Post on Phone",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Main photo",
+            "node": "Generate Main Photo in Studio",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Reel",
+            "node": "Start Reel in Studio",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Instagram carousel": {
+    "Queue Instagram Carousel": {
       "main": [
         [
           {
-            "node": "All posts queued",
+            "node": "Merge Queued Posts",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Instagram Reel": {
+    "Queue Instagram Reel": {
       "main": [
         [
           {
-            "node": "All posts queued",
+            "node": "Merge Queued Posts",
             "type": "main",
             "index": 1
           }
         ]
       ]
     },
-    "Instagram story": {
+    "Queue Instagram Story": {
       "main": [
         [
           {
-            "node": "All posts queued",
+            "node": "Merge Queued Posts",
             "type": "main",
             "index": 2
           }
         ]
       ]
     },
-    "TikTok": {
+    "Queue TikTok Video": {
       "main": [
         [
           {
-            "node": "All posts queued",
+            "node": "Merge Queued Posts",
             "type": "main",
             "index": 3
           }
         ]
       ]
     },
-    "X": {
+    "Queue X Post": {
       "main": [
         [
           {
-            "node": "All posts queued",
+            "node": "Merge Queued Posts",
             "type": "main",
             "index": 4
           }
         ]
       ]
     },
-    "Threads": {
+    "Queue Threads Post": {
       "main": [
         [
           {
-            "node": "All posts queued",
+            "node": "Merge Queued Posts",
             "type": "main",
             "index": 5
           }
         ]
       ]
     },
-    "Bluesky (cloud phone)": {
+    "Queue Bluesky Post on Phone": {
       "main": [
         [
           {
-            "node": "All posts queued",
+            "node": "Merge Queued Posts",
             "type": "main",
             "index": 6
           }
         ]
       ]
     },
-    "All posts queued": {
+    "Merge Queued Posts": {
       "main": [
         [
           {
-            "node": "Say what was queued",
+            "node": "Report Queued Posts",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "One of ours?": {
+    "If Account Is in Settings": {
       "main": [
         [
           {
-            "node": "With a screenshot?",
+            "node": "If Post Has Screenshot",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "With a screenshot?": {
+    "If Post Has Screenshot": {
       "main": [
         [
           {
-            "node": "Send the phone's screenshot",
+            "node": "Send Phone Screenshot",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Say how it went",
+            "node": "Report Post Result",
             "type": "main",
             "index": 0
           }

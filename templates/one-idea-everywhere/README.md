@@ -42,13 +42,14 @@ If a Studio step fails twice, the Error Trigger in the same workflow says where 
 2. Sign up at [nevermanual.cloud](https://nevermanual.cloud); make an API key in Accounts → API keys and add it as the
    *Never Manual API* credential.
 3. In Studio, import `Krea 2 Kiki + realism.json` (or use any workflow of yours that takes a `Prompt`) and put its ID in
-   **Settings → photo_workflow** (it looks like `user/krea-2-kiki-realism-xxxxxx`).
+   **Set Workflow Settings → photo_workflow** (it looks like `user/krea-2-kiki-realism-xxxxxx`).
 4. In Slate, connect your accounts: Instagram, TikTok, X, Threads by API; Bluesky on a cloud phone with a posting preset.
-   Give each account an Autofill voice for captions. Put the account IDs in **Settings**; delete the Post nodes of
-   networks you don't use.
+   Give each account an Autofill voice for captions. Put the account IDs in **Set Workflow Settings**; delete the Queue
+   nodes of networks you don't use and give **Merge Queued Posts** the same number of inputs as the Queue nodes left.
 5. Make a bot with [@BotFather](https://t.me/BotFather), add its token as the *Telegram* credential, and put your chat ID
-   in the trigger's *Restrict to Chat IDs* and in **Settings → telegram_chat_id**.
-6. Add an OpenAI credential to **Chat model** (n8n Cloud's free OpenAI credits work too), or swap it for OpenRouter Chat Model.
+   in the trigger's *Restrict to Chat IDs* and in **Set Workflow Settings → telegram_chat_id** (both hold the
+   placeholder `YOUR_TELEGRAM_CHAT_ID` until then, so the bot answers no one else).
+6. Add an OpenAI credential to **OpenAI Chat Model** (n8n Cloud's free OpenAI credits work too), or swap it for OpenRouter Chat Model.
 7. Publish the workflow, then Workflow settings → *Error workflow* → pick this workflow (n8n lists it once it is
    published), so failures reach Telegram.
 8. Send your bot an idea.
@@ -62,6 +63,6 @@ Slate plan; the model that plans the day costs a fraction of a cent.
 
 ## Customization
 
-- **Settings**: the character, how the photo prompt starts and ends, the video's length, the accounts.
-- **Plan the content**: the agent's instructions — the formats, the tone, the language.
+- **Set Workflow Settings**: the character, how the photo prompt starts and ends, the video's length, the accounts.
+- **Content Planner Agent**: the agent's instructions — the formats, the tone, the language.
 - Swap the main photo's workflow for any of yours, or the carousel's model for another one Studio offers.
